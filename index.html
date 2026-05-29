@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<!--
+    ============================================================
+    SITE INSTITUCIONAL — CONSTRUTORA MARVIT EXCELLENCE
+    ============================================================
+
+    Projeto:    Single-page institucional (Home)
+    Empresa:    Construtora Marvit Excellence — Valinhos/SP
+    Estrutura:  HTML + Tailwind CSS (via CDN) + JavaScript vanilla
+    Fontes:     Cormorant Garamond (display) + Manrope (texto)
+    Paleta:     Azul-marinho profundo + Branco-osso + Dourado fosco
+
+    ÍNDICE DE SEÇÕES:
+    ─────────────────────────────────────────────────────────────
+    [HEAD]    Meta tags, fontes, Tailwind, variáveis CSS
+    [CSS]     Estilos customizados (tema, animações, componentes)
+    [01]     Header / Navbar fixo + Menu Mobile
+    [02]     Hero — destaque principal
+    [03]     Diferenciais / Sobre — 3 pilares
+    [04]     Serviços — grid de 4 cards
+    [05]     Portfólio — 8 obras de 4 clientes
+    [06]     Depoimentos + Carrossel + Marquee de Clientes
+    [07]     CTA / Contato — formulário WhatsApp
+    [08]     Footer
+    [09]     Botão flutuante WhatsApp
+    [JS]     Scripts de interatividade
+    ─────────────────────────────────────────────────────────────
+-->
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construtora Marvit Excellence — Construindo hoje, realizando o amanhã</title>
+    <meta name="description" content="Construtora de alto padrão especializada em construção residencial, reformas comerciais, gerenciamento de obras e design de interiores. Valinhos/SP.">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fontes: Cormorant Garamond (display serif) + Manrope (sans body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Manrope:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ════════════════════════════════════════════════
+         * [CSS] ESTILOS CUSTOMIZADOS — TEMA MARVIT
+         * ────────────────────────────────────────────────
+         * Estrutura:
+         *   1. Variáveis CSS (paleta de cores)
+         *   2. Reset e tipografia base
+         *   3. Utilitários (linhas, grids decorativos)
+         *   4. Componentes (botões, cards, formulários)
+         *   5. Animações (reveal, marquee, hero)
+         *   6. Responsividade e detalhes
+         * ════════════════════════════════════════════════ */
+
+        /* ─── 1. VARIÁVEIS CSS DE TEMA ─── */
+        /* Centralizar todas as cores aqui facilita ajustes
+           globais. Para trocar a paleta, edite apenas este bloco. */
+        :root {
+            --ink: #0a1428;          /* Azul-marinho profundo (cor da marca) */
+            --ink-deep: #050a16;     /* Preto-azulado para fundos dramáticos */
+            --paper: #f5f3ee;        /* Branco-osso quente */
+            --paper-light: #fafaf7;
+            --rule: #1a2540;         /* Linha sutil sobre escuro */
+            --rule-light: #d9d5cc;   /* Linha sutil sobre claro */
+            --gold: #b08d3f;         /* Dourado fosco (acento CTA) */
+            --gold-bright: #c9a253;
+            --muted: #4a4538;        /* Texto secundário (escurecido para melhor leitura) */
+            --blue-mark: #1d3a6e;    /* Azul do logotipo */
+        }
+
+        /* Reset e base */
+        * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Manrope', sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            font-weight: 300;
+            letter-spacing: 0.01em;
+        }
+
+        /* Tipografia display */
+        .font-display { font-family: 'Cormorant Garamond', serif; }
+        .font-body { font-family: 'Manrope', sans-serif; }
+
+        /* Letras espaçadas (estilo editorial) */
+        .tracking-wider-plus { letter-spacing: 0.18em; }
+        .tracking-widest-plus { letter-spacing: 0.32em; }
+
+        /* Linhas decorativas (estilo planta arquitetônica) */
+        .rule-line {
+            display: inline-block;
+            width: 48px;
+            height: 1px;
+            background: currentColor;
+            vertical-align: middle;
+            margin: 0 12px;
+        }
+
+        /* Grid de plantas baixas (textura sutil em fundos) */
+        .blueprint-grid {
+            background-image:
+                linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+        .blueprint-grid-light {
+            background-image:
+                linear-gradient(rgba(10,20,40,0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(10,20,40,0.035) 1px, transparent 1px);
+            background-size: 80px 80px;
+        }
+
+        /* Botão CTA principal — dourado fosco com underline animado */
+        .btn-gold {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            padding: 18px 32px;
+            background: var(--gold);
+            color: var(--paper);
+            font-family: 'Manrope', sans-serif;
+            font-weight: 500;
+            font-size: 0.78rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            border: 1px solid var(--gold);
+            overflow: hidden;
+        }
+        .btn-gold::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--ink);
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+            z-index: 0;
+        }
+        .btn-gold > * { position: relative; z-index: 1; }
+        .btn-gold:hover::before { transform: translateY(0); }
+        .btn-gold:hover { border-color: var(--ink); }
+        .btn-gold .arrow { transition: transform 0.4s ease; }
+        .btn-gold:hover .arrow { transform: translateX(6px); }
+
+        /* Botão secundário (outline) */
+        .btn-outline {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            padding: 17px 32px;
+            background: transparent;
+            color: var(--paper);
+            font-family: 'Manrope', sans-serif;
+            font-weight: 500;
+            font-size: 0.78rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            border: 1px solid rgba(245, 243, 238, 0.4);
+            transition: all 0.4s ease;
+        }
+        .btn-outline:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        /* Link de navegação */
+        .nav-link {
+            position: relative;
+            font-size: 0.74rem;
+            font-weight: 400;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+            padding: 6px 0;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .nav-link:hover::after { width: 100%; }
+        .nav-link:hover { color: var(--gold); }
+
+        /* Numeração editorial das seções */
+        .section-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: 0.95rem;
+            color: var(--gold);
+            letter-spacing: 0.05em;
+        }
+
+        /* Hero — imagem com overlay e tratamento dramático */
+        .hero-bg {
+            background-image:
+                linear-gradient(135deg, rgba(5,10,22,0.78) 0%, rgba(10,20,40,0.55) 50%, rgba(5,10,22,0.85) 100%),
+                url('https://images.unsplash.com/photo-1486325212027-8081e485255e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Linha vertical decorativa (estilo planta) */
+        .vertical-rule {
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, var(--gold) 20%, var(--gold) 80%, transparent);
+        }
+
+        /* Card de serviço */
+        .service-card {
+            position: relative;
+            background: var(--paper-light);
+            border: 1px solid var(--rule-light);
+            padding: 56px 40px 48px;
+            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            overflow: hidden;
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--ink);
+            transform: translateY(101%);
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            z-index: 0;
+        }
+        .service-card > * { position: relative; z-index: 1; transition: color 0.5s ease; }
+        .service-card:hover::before { transform: translateY(0); }
+        .service-card:hover .service-title,
+        .service-card:hover .service-text,
+        .service-card:hover .service-number,
+        .service-card:hover .service-arrow { color: var(--paper); }
+        .service-card:hover .service-number { color: var(--gold); }
+        .service-card:hover .service-divider { background: rgba(245,243,238,0.2); }
+        .service-divider { transition: background 0.5s ease; }
+
+        /* Item de portfólio */
+        .portfolio-item {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .portfolio-item img {
+            transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .portfolio-item:hover img { transform: scale(1.06); }
+        .portfolio-item .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(5,10,22,0.92) 0%, rgba(5,10,22,0.3) 50%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .portfolio-item:hover .overlay { opacity: 1; }
+        .portfolio-item .caption {
+            position: absolute;
+            bottom: 32px;
+            left: 32px;
+            right: 32px;
+            color: var(--paper);
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .portfolio-item:hover .caption {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Pilar — diferencial */
+        .pillar-icon {
+            width: 56px;
+            height: 56px;
+            stroke: var(--gold);
+            stroke-width: 1;
+            fill: none;
+        }
+
+        /* Animação de entrada (reveal on scroll) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero text animations */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes drawLine {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
+        }
+        .hero-eyebrow { animation: fadeUp 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both; }
+        .hero-title { animation: fadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both; }
+        .hero-subtitle { animation: fadeUp 1s cubic-bezier(0.22, 1, 0.36, 1) 1s both; }
+        .hero-cta { animation: fadeUp 1s cubic-bezier(0.22, 1, 0.36, 1) 1.3s both; }
+        .hero-meta { animation: fadeIn 1.5s ease 1.6s both; }
+        .hero-line { animation: drawLine 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.8s both; transform-origin: left; }
+
+        /* Carrossel de depoimentos */
+        .testimonial-track {
+            display: flex;
+            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .testimonial-slide {
+            min-width: 100%;
+            padding: 0 20px;
+        }
+
+        /* Indicador scroll do hero */
+        @keyframes scrollIndicator {
+            0% { transform: translateY(0); opacity: 1; }
+            70% { transform: translateY(20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 0; }
+        }
+        .scroll-dot {
+            animation: scrollIndicator 2s ease-in-out infinite;
+        }
+
+        /* Numeração grande decorativa */
+        .big-numeral {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 300;
+            font-size: clamp(8rem, 18vw, 16rem);
+            line-height: 0.8;
+            color: var(--ink);
+            opacity: 0.06;
+            position: absolute;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+
+        /* Form inputs */
+        .form-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(245,243,238,0.25);
+            color: var(--paper);
+            padding: 14px 0;
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 300;
+            width: 100%;
+            transition: border-color 0.3s ease;
+        }
+        .form-input:focus {
+            outline: none;
+            border-bottom-color: var(--gold);
+        }
+        .form-input::placeholder {
+            color: rgba(245,243,238,0.4);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-size: 0.72rem;
+        }
+
+        /* Marquee de parceiros */
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+        .marquee-track {
+            display: flex;
+            gap: 80px;
+            animation: marquee 35s linear infinite;
+            width: max-content;
+        }
+
+        /* Estilo de scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--paper); }
+        ::-webkit-scrollbar-thumb { background: var(--ink); }
+
+        /* Seleção de texto */
+        ::selection { background: var(--gold); color: var(--paper); }
+
+        /* ================================================
+           BOTÃO FLUTUANTE DE WHATSAPP
+           ================================================ */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            z-index: 60;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #25D366;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.4);
+            opacity: 0;
+            transform: translateY(20px) scale(0.8);
+            pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .whatsapp-float.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+        .whatsapp-float:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 12px 40px rgba(37, 211, 102, 0.55);
+        }
+        .whatsapp-float svg {
+            width: 30px;
+            height: 30px;
+            color: white;
+        }
+        /* Pulso decorativo */
+        .whatsapp-float::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: #25D366;
+            opacity: 0.6;
+            animation: pulse 2.4s ease-out infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.6; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+        @media (max-width: 640px) {
+            .whatsapp-float {
+                bottom: 20px;
+                right: 20px;
+                width: 54px;
+                height: 54px;
+            }
+            .whatsapp-float svg { width: 26px; height: 26px; }
+        }
+    </style>
+</head>
+
+<body class="overflow-x-hidden">
+
+    <!-- ============================================
+         [01] HEADER / NAVBAR
+         ============================================
+         Header fixo no topo da página. Começa transparente
+         e ganha fundo escuro quando o usuário rola (ver [JS-01]).
+         Inclui logo, navegação desktop, CTA dourado e
+         botão hambúrguer para versão mobile.
+         ============================================ -->
+    <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
+            style="background: rgba(5, 10, 22, 0.0); backdrop-filter: blur(0px);">
+        <div class="max-w-[1600px] mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between h-20 lg:h-24">
+
+                <!-- Logo (placeholder textual estilizado) -->
+                <a href="#home" class="flex items-center gap-3 group">
+                    <!-- Mini logo SVG (edifícios estilizados) -->
+                    <svg class="w-9 h-9 lg:w-11 lg:h-11" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 38V18L22 14V38" stroke="currentColor" stroke-width="1.2" fill="none"/>
+                        <path d="M22 38V10L30 14V38" stroke="currentColor" stroke-width="1.2" fill="#1d3a6e" fill-opacity="0.5"/>
+                        <path d="M30 38V20L36 24V38" stroke="currentColor" stroke-width="1.2" fill="none"/>
+                        <ellipse cx="24" cy="40" rx="16" ry="2.5" stroke="currentColor" stroke-width="0.8" fill="none"/>
+                    </svg>
+                    <div class="leading-none">
+                        <div class="font-display text-xl lg:text-2xl font-semibold tracking-wide" style="color: var(--paper);">MARVIT</div>
+                        <div class="font-body text-[8px] lg:text-[9px] tracking-widest-plus mt-0.5" style="color: var(--gold);">EXCELLENCE</div>
+                    </div>
+                </a>
+
+                <!-- Navegação Desktop -->
+                <nav class="hidden lg:flex items-center gap-10" style="color: var(--paper);">
+                    <a href="#home" class="nav-link">Home</a>
+                    <a href="#sobre" class="nav-link">Sobre Nós</a>
+                    <a href="#servicos" class="nav-link">Serviços</a>
+                    <a href="#portfolio" class="nav-link">Portfólio</a>
+                    <a href="#contato" class="nav-link">Contato</a>
+                </nav>
+
+                <!-- CTA Desktop -->
+                <a href="#contato" class="hidden lg:inline-flex btn-gold !py-3 !px-6 !text-[0.7rem]">
+                    <span>Solicitar Orçamento</span>
+                    <span class="arrow">→</span>
+                </a>
+
+                <!-- Botão Mobile -->
+                <button id="mobile-toggle" class="lg:hidden flex flex-col gap-1.5 p-2" aria-label="Menu" style="color: var(--paper);">
+                    <span class="w-6 h-px bg-current"></span>
+                    <span class="w-6 h-px bg-current"></span>
+                    <span class="w-4 h-px bg-current ml-auto"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menu Mobile -->
+        <div id="mobile-menu" class="mobile-menu fixed inset-0 z-50 lg:hidden" style="background: var(--ink-deep);">
+            <div class="flex flex-col h-full p-8">
+                <div class="flex justify-end">
+                    <button id="mobile-close" class="text-3xl font-light p-2" style="color: var(--paper);">×</button>
+                </div>
+                <nav class="flex flex-col gap-6 mt-12" style="color: var(--paper);">
+                    <a href="#home" class="font-display text-3xl mobile-link">Home</a>
+                    <a href="#sobre" class="font-display text-3xl mobile-link">Sobre Nós</a>
+                    <a href="#servicos" class="font-display text-3xl mobile-link">Serviços</a>
+                    <a href="#portfolio" class="font-display text-3xl mobile-link">Portfólio</a>
+                    <a href="#contato" class="font-display text-3xl mobile-link">Contato</a>
+                </nav>
+                <div class="mt-auto pt-10 border-t" style="border-color: var(--rule);">
+                    <a href="#contato" class="btn-gold mobile-link">
+                        <span>Solicitar Orçamento</span>
+                        <span class="arrow">→</span>
+                    </a>
+                    <div class="mt-8 text-xs tracking-wider" style="color: var(--muted);">
+                        <p>(19) 99965-9191</p>
+                        <p class="mt-2">Valinhos/SP</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================
+         [02] SEÇÃO HERO — Destaque Principal
+         ============================================
+         Primeira tela que o usuário vê. Imagem de fundo
+         com parallax (background-attachment: fixed) +
+         overlay escuro + grid de "planta arquitetônica".
+         Contém: eyebrow, título grande, subtítulo, 2 CTAs
+         e barra de estatísticas (+18 anos, 9 clientes etc.).
+         ============================================ -->
+    <section id="home" class="hero-bg relative min-h-screen flex items-center" style="color: var(--paper);">
+        <!-- Grid de planta baixa sobre a imagem -->
+        <div class="absolute inset-0 blueprint-grid opacity-50"></div>
+
+        <!-- Conteúdo Hero -->
+        <div class="relative z-10 max-w-[1600px] mx-auto px-6 lg:px-12 py-32 lg:py-40 w-full">
+            <div class="grid grid-cols-12 gap-6">
+
+                <!-- Coluna lateral decorativa (esquerda) -->
+                <div class="hidden lg:flex col-span-1 flex-col items-center justify-between min-h-[60vh]">
+                    <div class="writing-mode-vertical text-[10px] tracking-widest-plus" style="color: var(--gold); writing-mode: vertical-rl; transform: rotate(180deg);">
+                        EST. CONSTRUTORA — VALINHOS / SP
+                    </div>
+                    <div class="vertical-rule h-32 hero-line"></div>
+                    <div class="font-display italic text-sm" style="color: var(--paper); opacity: 0.5;">01</div>
+                </div>
+
+                <!-- Conteúdo principal -->
+                <div class="col-span-12 lg:col-span-10">
+
+                    <!-- Eyebrow -->
+                    <div class="hero-eyebrow flex items-center gap-4 mb-10 text-xs tracking-widest-plus uppercase" style="color: var(--gold);">
+                        <span class="w-12 h-px" style="background: var(--gold);"></span>
+                        <span>Construtora de Alto Padrão</span>
+                        <span class="font-display italic normal-case tracking-normal text-sm" style="color: rgba(245,243,238,0.85);">— desde 2008</span>
+                    </div>
+
+                    <!-- Título principal -->
+                    <h1 class="hero-title font-display font-light leading-[0.95] mb-10"
+                        style="font-size: clamp(2.8rem, 7vw, 6.5rem);">
+                        Transformamos projetos<br>
+                        em realidade com<br>
+                        <em class="italic font-normal" style="color: var(--gold);">excelência</em>
+                        <span class="font-display"> & </span>
+                        <em class="italic font-normal">precisão</em>.
+                    </h1>
+
+                    <!-- Subtítulo -->
+                    <p class="hero-subtitle max-w-2xl text-base lg:text-lg font-light leading-relaxed mb-12"
+                       style="color: rgba(245,243,238,0.92);">
+                        Há quase duas décadas entregando obras residenciais e comerciais de alto padrão,
+                        unindo engenharia de ponta, materiais premium e a obsessão pelo detalhe que
+                        define cada empreendimento <em class="font-display italic">Marvit</em>.
+                    </p>
+
+                    <!-- CTAs -->
+                    <div class="hero-cta flex flex-col sm:flex-row gap-4 mb-20">
+                        <a href="#contato" class="btn-gold">
+                            <span>Solicitar Orçamento</span>
+                            <span class="arrow">→</span>
+                        </a>
+                        <a href="#portfolio" class="btn-outline">
+                            <span>Ver Portfólio</span>
+                        </a>
+                    </div>
+
+                    <!-- Meta info (rodapé do hero) -->
+                    <div class="hero-meta grid grid-cols-2 lg:grid-cols-4 gap-8 pt-10 border-t" style="border-color: rgba(245,243,238,0.15);">
+                        <div>
+                            <div class="font-display text-4xl lg:text-5xl font-semibold" style="color: var(--paper);">+18</div>
+                            <div class="text-[10px] tracking-widest-plus uppercase mt-2 font-medium" style="color: rgba(245,243,238,0.85);">Anos de Mercado</div>
+                        </div>
+                        <div>
+                            <div class="font-display text-4xl lg:text-5xl font-semibold" style="color: var(--paper);">9</div>
+                            <div class="text-[10px] tracking-widest-plus uppercase mt-2 font-medium" style="color: rgba(245,243,238,0.85);">Clientes Corporativos</div>
+                        </div>
+                        <div>
+                            <div class="font-display text-4xl lg:text-5xl font-semibold italic" style="color: var(--paper);">Multi</div>
+                            <div class="text-[10px] tracking-widest-plus uppercase mt-2 font-medium" style="color: rgba(245,243,238,0.85);">Setores Atendidos</div>
+                        </div>
+                        <div>
+                            <div class="font-display text-4xl lg:text-5xl font-semibold italic" style="color: var(--paper);">SP</div>
+                            <div class="text-[10px] tracking-widest-plus uppercase mt-2 font-medium" style="color: rgba(245,243,238,0.85);">Atuação Regional</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Indicador de scroll -->
+            <div class="absolute bottom-8 right-6 lg:right-12 flex flex-col items-center gap-3 hero-meta">
+                <span class="text-[10px] tracking-widest-plus uppercase font-medium" style="color: rgba(245,243,238,0.75);">Role</span>
+                <div class="w-px h-12 overflow-hidden" style="background: rgba(245,243,238,0.2);">
+                    <div class="w-px h-4 scroll-dot" style="background: var(--gold);"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         [03] SEÇÃO SOBRE — 3 Pilares da Empresa
+         ============================================
+         Apresenta a filosofia da Marvit em 3 colunas:
+         Pontualidade, Materiais Premium e Engenharia.
+         Cada pilar tem ícone SVG, numeração romana grande
+         de fundo e parágrafo explicativo.
+         Fecha com a frase-assinatura da marca.
+         ============================================ -->
+    <section id="sobre" class="relative py-28 lg:py-40 overflow-hidden" style="background: var(--paper);">
+        <div class="blueprint-grid-light absolute inset-0 opacity-60"></div>
+
+        <div class="relative max-w-[1600px] mx-auto px-6 lg:px-12">
+
+            <!-- Cabeçalho da seção -->
+            <div class="grid grid-cols-12 gap-6 mb-24 reveal">
+                <div class="col-span-12 lg:col-span-4">
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="section-number">— 02 / Sobre</span>
+                    </div>
+                    <h2 class="font-display font-light leading-[1.05]" style="font-size: clamp(2.5rem, 5vw, 4rem); color: var(--ink);">
+                        Três pilares.<br>
+                        <em class="italic" style="color: var(--gold);">Uma</em> filosofia.
+                    </h2>
+                </div>
+                <div class="col-span-12 lg:col-span-5 lg:col-start-8 flex items-end">
+                    <p class="text-base font-light leading-relaxed" style="color: var(--muted);">
+                        Cada obra carrega a assinatura Marvit Excellence — uma síntese de
+                        rigor técnico, curadoria de materiais e respeito absoluto pelo cronograma.
+                        Não construímos apenas estruturas; <span style="color: var(--ink);">construímos a permanência</span>.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Grid de 3 pilares -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-px" style="background: var(--rule-light);">
+
+                <!-- Pilar 1 -->
+                <div class="reveal relative p-12 lg:p-16" style="background: var(--paper);">
+                    <div class="big-numeral" style="top: -20px; right: 20px;">I</div>
+                    <div class="relative">
+                        <svg class="pillar-icon mb-10" viewBox="0 0 56 56" fill="none">
+                            <circle cx="28" cy="28" r="22"/>
+                            <path d="M28 14V28L36 34"/>
+                            <path d="M28 6V10M28 46V50M6 28H10M46 28H50"/>
+                        </svg>
+                        <div class="font-display italic text-sm mb-3" style="color: var(--gold);">Pilar I</div>
+                        <h3 class="font-display text-3xl lg:text-4xl font-medium mb-5 leading-tight">Pontualidade<br>Inegociável</h3>
+                        <p class="text-sm font-light leading-relaxed" style="color: var(--muted);">
+                            Cronogramas detalhados, marcos contratuais auditáveis e gestão de riscos contínua.
+                            Entregar no prazo é o mínimo — adiantar é o objetivo.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Pilar 2 -->
+                <div class="reveal relative p-12 lg:p-16" style="background: var(--paper); transition-delay: 0.15s;">
+                    <div class="big-numeral" style="top: -20px; right: 20px;">II</div>
+                    <div class="relative">
+                        <svg class="pillar-icon mb-10" viewBox="0 0 56 56" fill="none">
+                            <path d="M28 6L48 18V38L28 50L8 38V18L28 6Z"/>
+                            <path d="M28 6V50M8 18L48 38M48 18L8 38"/>
+                        </svg>
+                        <div class="font-display italic text-sm mb-3" style="color: var(--gold);">Pilar II</div>
+                        <h3 class="font-display text-3xl lg:text-4xl font-medium mb-5 leading-tight">Materiais<br>Premium</h3>
+                        <p class="text-sm font-light leading-relaxed" style="color: var(--muted);">
+                            Parcerias diretas com fornecedores de elite — pedras naturais, madeiras certificadas
+                            e acabamentos importados. Curadoria que se sente ao toque.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Pilar 3 -->
+                <div class="reveal relative p-12 lg:p-16" style="background: var(--paper); transition-delay: 0.3s;">
+                    <div class="big-numeral" style="top: -20px; right: 20px;">III</div>
+                    <div class="relative">
+                        <svg class="pillar-icon mb-10" viewBox="0 0 56 56" fill="none">
+                            <rect x="8" y="14" width="40" height="36" rx="1"/>
+                            <path d="M8 22H48M16 14V8M40 14V8M20 30H36M20 38H30"/>
+                        </svg>
+                        <div class="font-display italic text-sm mb-3" style="color: var(--gold);">Pilar III</div>
+                        <h3 class="font-display text-3xl lg:text-4xl font-medium mb-5 leading-tight">Engenharia<br>de Ponta</h3>
+                        <p class="text-sm font-light leading-relaxed" style="color: var(--muted);">
+                            BIM, modelagem 3D e controle de qualidade em cada etapa. Tecnologia a serviço
+                            da arquitetura — invisível na fachada, indispensável na estrutura.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Frase de assinatura -->
+            <div class="reveal mt-24 lg:mt-32 text-center">
+                <p class="font-display italic font-light leading-tight" style="font-size: clamp(1.5rem, 3vw, 2.5rem); color: var(--ink);">
+                    <span class="rule-line" style="color: var(--gold);"></span>
+                    Construindo hoje, realizando o <em style="color: var(--gold);">amanhã</em>.
+                    <span class="rule-line" style="color: var(--gold);"></span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         [04] SEÇÃO SERVIÇOS — Grid de 4 Cards
+         ============================================
+         Apresenta os 4 serviços principais: Construção
+         Residencial, Reformas Comerciais, Gerenciamento
+         de Obras e Design de Interiores.
+         Cada card tem efeito hover que preenche o card
+         com azul-marinho (slide-up animado).
+         ============================================ -->
+    <section id="servicos" class="relative py-28 lg:py-40" style="background: var(--paper-light);">
+        <div class="max-w-[1600px] mx-auto px-6 lg:px-12">
+
+            <!-- Cabeçalho -->
+            <div class="grid grid-cols-12 gap-6 mb-20 reveal">
+                <div class="col-span-12 lg:col-span-6">
+                    <span class="section-number">— 03 / Serviços</span>
+                    <h2 class="font-display font-light leading-[1.05] mt-6" style="font-size: clamp(2.5rem, 5vw, 4rem); color: var(--ink);">
+                        O que <em class="italic" style="color: var(--gold);">entregamos</em>,<br>
+                        do projeto à chave.
+                    </h2>
+                </div>
+                <div class="col-span-12 lg:col-span-5 lg:col-start-8 flex items-end">
+                    <p class="text-base font-light leading-relaxed" style="color: var(--muted);">
+                        Quatro frentes de atuação, uma única assinatura. Cada serviço é executado
+                        por equipes dedicadas e auditadas pela nossa diretoria técnica.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Grid de serviços -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-px" style="background: var(--rule-light);">
+
+                <!-- Serviço 1 -->
+                <div class="service-card reveal">
+                    <div class="flex items-start justify-between mb-12">
+                        <span class="service-number font-display italic text-xl" style="color: var(--gold);">01</span>
+                        <svg class="service-arrow w-8 h-8" style="color: var(--ink);" viewBox="0 0 32 32" fill="none">
+                            <path d="M8 24L24 8M24 8H10M24 8V22" stroke="currentColor" stroke-width="1"/>
+                        </svg>
+                    </div>
+                    <h3 class="service-title font-display text-3xl lg:text-4xl font-medium mb-2" style="color: var(--ink);">Construção Residencial</h3>
+                    <div class="service-divider w-12 h-px my-6" style="background: var(--ink); opacity: 0.3;"></div>
+                    <p class="service-text text-sm font-light leading-relaxed" style="color: var(--muted);">
+                        Residências de alto padrão executadas do alicerce ao paisagismo. Casas únicas,
+                        projetadas para durar gerações.
+                    </p>
+                </div>
+
+                <!-- Serviço 2 -->
+                <div class="service-card reveal" style="transition-delay: 0.1s;">
+                    <div class="flex items-start justify-between mb-12">
+                        <span class="service-number font-display italic text-xl" style="color: var(--gold);">02</span>
+                        <svg class="service-arrow w-8 h-8" style="color: var(--ink);" viewBox="0 0 32 32" fill="none">
+                            <path d="M8 24L24 8M24 8H10M24 8V22" stroke="currentColor" stroke-width="1"/>
+                        </svg>
+                    </div>
+                    <h3 class="service-title font-display text-3xl lg:text-4xl font-medium mb-2" style="color: var(--ink);">Reformas Comerciais</h3>
+                    <div class="service-divider w-12 h-px my-6" style="background: var(--ink); opacity: 0.3;"></div>
+                    <p class="service-text text-sm font-light leading-relaxed" style="color: var(--muted);">
+                        Lojas, escritórios e empreendimentos comerciais — reformas que respeitam o
+                        funcionamento do seu negócio e aceleram o retorno do investimento.
+                    </p>
+                </div>
+
+                <!-- Serviço 3 -->
+                <div class="service-card reveal" style="transition-delay: 0.2s;">
+                    <div class="flex items-start justify-between mb-12">
+                        <span class="service-number font-display italic text-xl" style="color: var(--gold);">03</span>
+                        <svg class="service-arrow w-8 h-8" style="color: var(--ink);" viewBox="0 0 32 32" fill="none">
+                            <path d="M8 24L24 8M24 8H10M24 8V22" stroke="currentColor" stroke-width="1"/>
+                        </svg>
+                    </div>
+                    <h3 class="service-title font-display text-3xl lg:text-4xl font-medium mb-2" style="color: var(--ink);">Gerenciamento de Obras</h3>
+                    <div class="service-divider w-12 h-px my-6" style="background: var(--ink); opacity: 0.3;"></div>
+                    <p class="service-text text-sm font-light leading-relaxed" style="color: var(--muted);">
+                        Já tem o projeto? Coordenamos fornecedores, mão de obra e cronograma com a
+                        rigorosa metodologia Marvit, garantindo entrega impecável.
+                    </p>
+                </div>
+
+                <!-- Serviço 4 -->
+                <div class="service-card reveal" style="transition-delay: 0.3s;">
+                    <div class="flex items-start justify-between mb-12">
+                        <span class="service-number font-display italic text-xl" style="color: var(--gold);">04</span>
+                        <svg class="service-arrow w-8 h-8" style="color: var(--ink);" viewBox="0 0 32 32" fill="none">
+                            <path d="M8 24L24 8M24 8H10M24 8V22" stroke="currentColor" stroke-width="1"/>
+                        </svg>
+                    </div>
+                    <h3 class="service-title font-display text-3xl lg:text-4xl font-medium mb-2" style="color: var(--ink);">Design de Interiores</h3>
+                    <div class="service-divider w-12 h-px my-6" style="background: var(--ink); opacity: 0.3;"></div>
+                    <p class="service-text text-sm font-light leading-relaxed" style="color: var(--muted);">
+                        Ambientes assinados — do conceito ao último abajur. Arquitetos parceiros que
+                        traduzem seu estilo de vida em espaço habitável.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         [05] SEÇÃO PORTFÓLIO — 8 Obras Reais
+         ============================================
+         Galeria assimétrica de obras já entregues.
+         Estrutura:
+           - Fileira 1: Tanque Parason (vertical) +
+                       Fluidra Pro Center + Óptima Sala
+           - Fileira 2: 4 quadrados (Parason, Óptima, 2x Kadant)
+           - Fileira 3: Banner horizontal Fachada Fluidra
+
+         Cada item tem:
+           - Imagem com efeito zoom no hover
+           - Overlay escuro que aparece no hover
+           - Legenda com cliente + título + descrição
+         ============================================ -->
+    <section id="portfolio" class="relative py-28 lg:py-40" style="background: var(--ink-deep); color: var(--paper);">
+        <div class="blueprint-grid absolute inset-0 opacity-40"></div>
+
+        <div class="relative max-w-[1600px] mx-auto px-6 lg:px-12">
+
+            <!-- Cabeçalho -->
+            <div class="grid grid-cols-12 gap-6 mb-20 reveal">
+                <div class="col-span-12 lg:col-span-7">
+                    <span class="section-number">— 04 / Portfólio</span>
+                    <h2 class="font-display font-light leading-[1.05] mt-6" style="font-size: clamp(2.5rem, 5vw, 4rem);">
+                        Obras que <em class="italic" style="color: var(--gold);">contam</em><br>
+                        nossa história.
+                    </h2>
+                </div>
+                <div class="col-span-12 lg:col-span-4 lg:col-start-9 flex items-end justify-start lg:justify-end">
+                    <a href="#contato" class="inline-flex items-center gap-3 text-xs tracking-widest-plus uppercase pb-2 border-b" style="color: var(--gold); border-color: var(--gold);">
+                        Ver Todos os Projetos
+                        <span>→</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Grid de portfólio (assimétrico) -->
+            <div class="grid grid-cols-12 gap-4 lg:gap-6">
+
+                <!-- ============ FILEIRA 1 (Destaques principais) ============ -->
+
+                <!-- Item 1 (grande, vertical) — PARASON: Tanque de Nitrogênio -->
+                <div class="portfolio-item col-span-12 md:col-span-7 row-span-2 aspect-[4/5] reveal">
+                    <img src="img/parason-01.jpg" alt="Instalação de tanque de nitrogênio líquido — Parason Indiana">
+                    <div class="overlay"></div>
+                    <div class="caption">
+                        <div class="text-[10px] tracking-widest-plus uppercase mb-2" style="color: var(--gold);">Industrial · Parason Indiana</div>
+                        <div class="font-display text-3xl lg:text-4xl">Instalação de Tanque Criogênico</div>
+                        <div class="text-sm font-light mt-2 opacity-80">Base estrutural, contenção e infraestrutura para N₂ líquido</div>
+                    </div>
+                </div>
+
+                <!-- Item 2 — FLUIDRA: Fachada Pro Center -->
+                <div class="portfolio-item col-span-12 md:col-span-5 aspect-[4/3] reveal" style="transition-delay: 0.1s;">
+                    <img src="img/fluidra-01.jpg" alt="Fachada Fluidra Pro Center finalizada — Fluidra do Brasil">
+                    <div class="overlay"></div>
+                    <div class="caption">
+                        <div class="text-[10px] tracking-widest-plus uppercase mb-2" style="color: var(--gold);">Comercial · Fluidra do Brasil</div>
+                        <div class="font-display text-2xl lg:text-3xl">Fluidra Pro Center</div>
+                        <div class="text-sm font-light mt-2 opacity-80">Fachada comercial, esquadrias e plataformas de carga</div>
+                    </div>
+                </div>
+
+                <!-- Item 3 — ÓPTIMA DO BRASIL: Sala Operacional -->
+                <div class="portfolio-item col-span-12 md:col-span-5 aspect-[4/3] reveal" style="transition-delay: 0.2s;">
+                    <img src="img/optima-01.jpg" alt="Sala operacional finalizada — Óptima do Brasil">
+                    <div class="overlay"></div>
+                    <div class="caption">
+                        <div class="text-[10px] tracking-widest-plus uppercase mb-2" style="color: var(--gold);">Comercial · Óptima do Brasil</div>
+                        <div class="font-display text-2xl lg:text-3xl">Sala Operacional</div>
+                        <div class="text-sm font-light mt-2 opacity-80">Layout corporativo, divisórias e infraestrutura completa</div>
+                    </div>
+                </div>
+
+                <!-- ============ FILEIRA 2 (Grid 4 colunas) ============ -->
+
+                <!-- Item 4 — PARASON: Içamento -->
+                <div class="portfolio-item col-span-6 md:col-span-3 aspect-square reveal" style="transition-delay: 0.1s;">
+                    <img src="img/parason-02.jpg" alt="Operação de içamento com guindaste — Parason Indiana">
+                    <div class="overlay"></div>
+                    <div class="caption">
+                        <div class="text-[10px] tracking-widest-plus uppercase mb-2" style="color: var(--gold);">Industrial · Parason</div>
+                        <div class="font-display text-xl lg:text-2xl">Içamento de Obra</div>
+                    </div>
+                </div>
+
+                <!-- Item 5 — ÓPTIMA DO BRASIL: Galpão Industrial -->
+                <div class="portfolio-item col-span-6 md:col-span-3 aspect-square reveal" style="transition-delay: 0.15s;">
+                    <img src="img/optima-02.jpg" alt="Galpão industrial com mezanino — Óptima do Brasil">
+                    <div class="overlay"></div>
+                    <div class="caption">
+                        <div class="text-[10px] tracking-widest-plus uppercase mb-2" style="color: var(--gold);">Industrial · Óptima</div>
+                        <div class="font-display text-xl lg:text-2xl">Galpão & Mezanino</div>
+                    </div>
+                </div>
+
+                <!-- Item 6 — KADANT: Cozinha Industrial -->
+                <div class="portfolio-item col-span-6 md:col-span-3 aspect-square reveal" style="transition-delay: 0.2s;">
+                    <img src="img/kadant-01.jpg" alt="Cozinha industrial finalizada — Kadant">
+                    <div class="overlay"></div>
+                    <div class="caption">
+                        <div class="text-[10px] tracking-widest-plus uppercase mb-2" style="color: var(--gold);">Industrial · Kadant</div>
+                        <div class="font-display text-xl lg:text-2xl">Cozinha Industrial</div>
+                    </div>
+                </div>
+
+                <!-- Item 7 — KADANT: Fachada Corporativa -->
+                <div class="portfolio-item col-span-6 md:col-span-3 aspect-square reveal" style="transition-delay: 0.25s;">
+                    <img src="img/kadant-02.jpg" alt="Fachada corporativa com brises — Kadant">
+                    <div class="overlay"></div>
+                    <div class="caption">
+                        <div class="text-[10px] tracking-widest-plus uppercase mb-2" style="color: var(--gold);">Corporativo · Kadant</div>
+                        <div class="font-display text-xl lg:text-2xl">Fachada Corporativa</div>
+                    </div>
+                </div>
+
+                <!-- Item 8 — FLUIDRA: Fachada Principal -->
+                <div class="portfolio-item col-span-12 md:col-span-12 aspect-[16/6] reveal" style="transition-delay: 0.3s;">
+                    <img src="img/fluidra-02.jpg" alt="Fachada principal Fluidra — Fluidra do Brasil">
+                    <div class="overlay"></div>
+                    <div class="caption">
+                        <div class="text-[10px] tracking-widest-plus uppercase mb-2" style="color: var(--gold);">Industrial · Fluidra do Brasil</div>
+                        <div class="font-display text-2xl lg:text-3xl">Fachada Principal Fluidra</div>
+                        <div class="text-sm font-light mt-2 opacity-80">Pintura, sinalização externa e revitalização de fachada industrial</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         [06] SEÇÃO DEPOIMENTOS + CLIENTES
+         ============================================
+         Duas partes:
+           1. Carrossel de 3 depoimentos (Kadant, Symrise,
+              Leroy Merlin) — controlado por [JS-04]
+           2. Marquee de logos/nomes dos 9 clientes em
+              loop infinito (animação CSS pura)
+         ============================================ -->
+    <section class="relative py-28 lg:py-40" style="background: var(--paper);">
+        <div class="max-w-[1600px] mx-auto px-6 lg:px-12">
+
+            <!-- Cabeçalho -->
+            <div class="text-center mb-20 reveal">
+                <span class="section-number">— 05 / Depoimentos</span>
+                <h2 class="font-display font-light leading-[1.05] mt-6 max-w-3xl mx-auto" style="font-size: clamp(2.2rem, 4.5vw, 3.5rem); color: var(--ink);">
+                    A palavra final é<br>
+                    de <em class="italic" style="color: var(--gold);">quem confiou</em>.
+                </h2>
+            </div>
+
+            <!-- Carrossel -->
+            <div class="relative reveal max-w-4xl mx-auto">
+                <div class="overflow-hidden">
+                    <div id="testimonial-track" class="testimonial-track">
+
+                        <!-- Depoimento 1 — KADANT (indústria) -->
+                        <div class="testimonial-slide">
+                            <div class="text-center">
+                                <div class="font-display text-6xl lg:text-7xl leading-none mb-8" style="color: var(--gold);">"</div>
+                                <p class="font-display italic font-light leading-snug mb-10" style="font-size: clamp(1.3rem, 2.5vw, 2rem); color: var(--ink);">
+                                    A Marvit executou nossa expansão fabril sem parar uma única linha de produção.
+                                    Cronograma cumprido, normas técnicas respeitadas e zero retrabalho na entrega.
+                                    Parceiro que entende o que é uma operação industrial em funcionamento.
+                                </p>
+                                <div class="flex items-center justify-center gap-4">
+                                    <span class="w-10 h-px" style="background: var(--gold);"></span>
+                                    <div>
+                                        <div class="font-medium text-sm" style="color: var(--ink);">R. M.</div>
+                                        <div class="text-xs tracking-wider uppercase mt-1" style="color: var(--muted);">Engenharia de Manutenção · Kadant</div>
+                                    </div>
+                                    <span class="w-10 h-px" style="background: var(--gold);"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Depoimento 2 — SYMRISE CITRATUS (químico/aromas) -->
+                        <div class="testimonial-slide">
+                            <div class="text-center">
+                                <div class="font-display text-6xl lg:text-7xl leading-none mb-8" style="color: var(--gold);">"</div>
+                                <p class="font-display italic font-light leading-snug mb-10" style="font-size: clamp(1.3rem, 2.5vw, 2rem); color: var(--ink);">
+                                    Reformamos áreas críticas seguindo padrões internacionais de qualidade e
+                                    biossegurança. A equipe Marvit entregou ambiente impecável, dentro do prazo
+                                    e com a documentação técnica que nossa auditoria exigia.
+                                </p>
+                                <div class="flex items-center justify-center gap-4">
+                                    <span class="w-10 h-px" style="background: var(--gold);"></span>
+                                    <div>
+                                        <div class="font-medium text-sm" style="color: var(--ink);">C. T.</div>
+                                        <div class="text-xs tracking-wider uppercase mt-1" style="color: var(--muted);">Coordenação de Facilities · Symrise Citratus</div>
+                                    </div>
+                                    <span class="w-10 h-px" style="background: var(--gold);"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Depoimento 3 — LEROY MERLIN (varejo) -->
+                        <div class="testimonial-slide">
+                            <div class="text-center">
+                                <div class="font-display text-6xl lg:text-7xl leading-none mb-8" style="color: var(--gold);">"</div>
+                                <p class="font-display italic font-light leading-snug mb-10" style="font-size: clamp(1.3rem, 2.5vw, 2rem); color: var(--ink);">
+                                    Obras em loja em operação são desafiadoras — exigem ritmo, organização e
+                                    respeito ao cliente final. A Marvit executou nossa intervenção em prazo
+                                    agressivo, sem qualquer impacto na experiência de quem visitava a loja.
+                                </p>
+                                <div class="flex items-center justify-center gap-4">
+                                    <span class="w-10 h-px" style="background: var(--gold);"></span>
+                                    <div>
+                                        <div class="font-medium text-sm" style="color: var(--ink);">F. A.</div>
+                                        <div class="text-xs tracking-wider uppercase mt-1" style="color: var(--muted);">Gerência de Obras · Leroy Merlin</div>
+                                    </div>
+                                    <span class="w-10 h-px" style="background: var(--gold);"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controles -->
+                <div class="flex items-center justify-center gap-8 mt-12">
+                    <button id="prev-testimonial" class="group flex items-center gap-2 text-xs tracking-widest-plus uppercase" style="color: var(--ink);">
+                        <span class="transition-transform group-hover:-translate-x-1">←</span>
+                        <span>Anterior</span>
+                    </button>
+                    <div id="testimonial-dots" class="flex gap-2">
+                        <button class="dot w-8 h-px transition-all duration-500" data-index="0" style="background: var(--ink);"></button>
+                        <button class="dot w-8 h-px transition-all duration-500 opacity-20" data-index="1" style="background: var(--ink);"></button>
+                        <button class="dot w-8 h-px transition-all duration-500 opacity-20" data-index="2" style="background: var(--ink);"></button>
+                    </div>
+                    <button id="next-testimonial" class="group flex items-center gap-2 text-xs tracking-widest-plus uppercase" style="color: var(--ink);">
+                        <span>Próximo</span>
+                        <span class="transition-transform group-hover:translate-x-1">→</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Marquee de Clientes -->
+            <div class="mt-32 lg:mt-40 reveal">
+                <div class="text-center mb-12">
+                    <div class="text-[10px] tracking-widest-plus uppercase" style="color: var(--muted);">
+                        <span class="rule-line"></span>
+                        Clientes que confiam em nós
+                        <span class="rule-line"></span>
+                    </div>
+                </div>
+                <div class="overflow-hidden" style="mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);">
+                    <div class="marquee-track items-center" style="color: var(--ink);">
+                        <!-- Clientes -->
+                        <div class="font-display text-2xl lg:text-3xl whitespace-nowrap opacity-50 tracking-widest-plus">KADANT</div>
+                        <div class="font-display text-2xl lg:text-3xl italic font-light whitespace-nowrap opacity-50">Fluidra do Brasil</div>
+                        <div class="font-display text-2xl lg:text-3xl italic font-light whitespace-nowrap opacity-50">Óptima do Brasil</div>
+                        <div class="font-display text-2xl lg:text-3xl whitespace-nowrap opacity-50 tracking-wider">SYMRISE CITRATUS</div>
+                        <div class="font-display text-2xl lg:text-3xl italic font-light whitespace-nowrap opacity-50">Asten</div>
+                        <div class="font-display text-2xl lg:text-3xl whitespace-nowrap opacity-50 tracking-wider">PARASON INDIANA</div>
+                        <div class="font-display text-2xl lg:text-3xl italic font-light whitespace-nowrap opacity-50">Hidro All</div>
+                        <div class="font-display text-2xl lg:text-3xl whitespace-nowrap opacity-50 tracking-widest-plus">CLICHER LUX</div>
+                        <div class="font-display text-2xl lg:text-3xl italic font-light whitespace-nowrap opacity-50">Leroy Merlin</div>
+                        <!-- Duplicado para loop infinito -->
+                        <div class="font-display text-2xl lg:text-3xl whitespace-nowrap opacity-50 tracking-widest-plus">KADANT</div>
+                        <div class="font-display text-2xl lg:text-3xl italic font-light whitespace-nowrap opacity-50">Fluidra do Brasil</div>
+                        <div class="font-display text-2xl lg:text-3xl italic font-light whitespace-nowrap opacity-50">Óptima do Brasil</div>
+                        <div class="font-display text-2xl lg:text-3xl whitespace-nowrap opacity-50 tracking-wider">SYMRISE CITRATUS</div>
+                        <div class="font-display text-2xl lg:text-3xl italic font-light whitespace-nowrap opacity-50">Asten</div>
+                        <div class="font-display text-2xl lg:text-3xl whitespace-nowrap opacity-50 tracking-wider">PARASON INDIANA</div>
+                        <div class="font-display text-2xl lg:text-3xl italic font-light whitespace-nowrap opacity-50">Hidro All</div>
+                        <div class="font-display text-2xl lg:text-3xl whitespace-nowrap opacity-50 tracking-widest-plus">CLICHER LUX</div>
+                        <div class="font-display text-2xl lg:text-3xl italic font-light whitespace-nowrap opacity-50">Leroy Merlin</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         [07] SEÇÃO CTA — Solicitar Orçamento
+         ============================================
+         Conversão principal do site. Dividido em 2 colunas:
+           - Esquerda: texto + dados de contato (endereço,
+             telefone, e-mail) com ícones SVG dourados
+           - Direita: formulário que envia direto para o
+             WhatsApp via [JS-06] (sem precisar de backend)
+         ============================================ -->
+    <section id="contato" class="relative py-28 lg:py-40 overflow-hidden" style="background: var(--ink); color: var(--paper);">
+        <div class="blueprint-grid absolute inset-0 opacity-50"></div>
+
+        <div class="relative max-w-[1600px] mx-auto px-6 lg:px-12">
+            <div class="grid grid-cols-12 gap-8 lg:gap-16">
+
+                <!-- Coluna esquerda — texto -->
+                <div class="col-span-12 lg:col-span-6 reveal">
+                    <span class="section-number">— 06 / Orçamento</span>
+                    <h2 class="font-display font-light leading-[1.05] mt-6 mb-8" style="font-size: clamp(2.5rem, 5vw, 4.5rem);">
+                        Vamos <em class="italic" style="color: var(--gold);">conversar</em><br>
+                        sobre seu projeto.
+                    </h2>
+                    <p class="text-base lg:text-lg font-light leading-relaxed mb-12 max-w-md" style="color: rgba(245,243,238,0.9);">
+                        Conte-nos sobre sua ideia. Respondemos em até 24 horas com uma proposta
+                        preliminar e agendamos uma visita técnica sem compromisso.
+                    </p>
+
+                    <!-- Info de contato -->
+                    <div class="space-y-8">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background: var(--gold);">
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                                    <circle cx="12" cy="10" r="3"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="text-[10px] tracking-widest-plus uppercase mb-1" style="color: var(--gold);">Endereço</div>
+                                <div class="text-sm font-light leading-relaxed">
+                                    Avenida Rosa Belmiro Ramos, 811<br>
+                                    Valinhos/SP — CEP 13275-400
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background: var(--gold);">
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.37 1.9.72 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0122 16.92z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="text-[10px] tracking-widest-plus uppercase mb-1" style="color: var(--gold);">Telefone</div>
+                                <div class="text-sm font-light">(19) 99965-9191</div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background: var(--gold);">
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                    <polyline points="22,6 12,13 2,6"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="text-[10px] tracking-widest-plus uppercase mb-1" style="color: var(--gold);">E-mail</div>
+                                <div class="text-sm font-light">contato@marvitexcellence.com.br</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna direita — formulário -->
+                <div class="col-span-12 lg:col-span-6 reveal" style="transition-delay: 0.2s;">
+                    <form id="quote-form" class="space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <input type="text" id="nome" class="form-input" placeholder="Nome Completo" required>
+                            <input type="tel" id="telefone" class="form-input" placeholder="Telefone" required>
+                        </div>
+                        <input type="email" id="email" class="form-input" placeholder="E-mail" required>
+
+                        <div>
+                            <label class="text-[10px] tracking-widest-plus uppercase mb-4 block" style="color: var(--gold);">Tipo de Projeto</label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <label class="flex items-center gap-2 cursor-pointer group">
+                                    <input type="radio" name="project" value="Construção Residencial" class="sr-only peer" required>
+                                    <span class="w-3 h-3 border peer-checked:bg-[--gold] peer-checked:border-[--gold] transition-all" style="border-color: rgba(245,243,238,0.4);"></span>
+                                    <span class="text-sm font-light">Construção Residencial</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer group">
+                                    <input type="radio" name="project" value="Reforma Comercial" class="sr-only peer">
+                                    <span class="w-3 h-3 border peer-checked:bg-[--gold] peer-checked:border-[--gold] transition-all" style="border-color: rgba(245,243,238,0.4);"></span>
+                                    <span class="text-sm font-light">Reforma Comercial</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer group">
+                                    <input type="radio" name="project" value="Gerenciamento de Obras" class="sr-only peer">
+                                    <span class="w-3 h-3 border peer-checked:bg-[--gold] peer-checked:border-[--gold] transition-all" style="border-color: rgba(245,243,238,0.4);"></span>
+                                    <span class="text-sm font-light">Gerenciamento de Obras</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer group">
+                                    <input type="radio" name="project" value="Design de Interiores" class="sr-only peer">
+                                    <span class="w-3 h-3 border peer-checked:bg-[--gold] peer-checked:border-[--gold] transition-all" style="border-color: rgba(245,243,238,0.4);"></span>
+                                    <span class="text-sm font-light">Design de Interiores</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <textarea id="mensagem" class="form-input" rows="4" placeholder="Conte-nos sobre seu projeto" required></textarea>
+
+                        <button type="submit" class="btn-gold w-full justify-center">
+                            <span>Enviar via WhatsApp</span>
+                            <span class="arrow">→</span>
+                        </button>
+
+                        <p class="text-[10px] tracking-widest-plus uppercase text-center font-medium" style="color: rgba(245,243,238,0.65);">
+                            Ao enviar, você será redirecionado ao WhatsApp
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         [08] FOOTER
+         ============================================
+         Grid de 4 colunas:
+           1. Marca (logo SVG + slogan)
+           2. Navegação rápida (links âncora)
+           3. Lista de serviços
+           4. Contato direto (WhatsApp, e-mail, endereço)
+         Linha inferior: copyright, CNPJ e links jurídicos.
+         ============================================ -->
+    <footer class="relative pt-20 pb-10" style="background: var(--ink-deep); color: var(--paper);">
+        <div class="max-w-[1600px] mx-auto px-6 lg:px-12">
+
+            <!-- Top do footer -->
+            <div class="grid grid-cols-12 gap-8 pb-16 border-b" style="border-color: var(--rule);">
+
+                <!-- Branding -->
+                <div class="col-span-12 lg:col-span-4">
+                    <div class="flex items-center gap-3 mb-6">
+                        <svg class="w-10 h-10" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: var(--paper);">
+                            <path d="M14 38V18L22 14V38" stroke="currentColor" stroke-width="1.2" fill="none"/>
+                            <path d="M22 38V10L30 14V38" stroke="currentColor" stroke-width="1.2" fill="#1d3a6e" fill-opacity="0.5"/>
+                            <path d="M30 38V20L36 24V38" stroke="currentColor" stroke-width="1.2" fill="none"/>
+                            <ellipse cx="24" cy="40" rx="16" ry="2.5" stroke="currentColor" stroke-width="0.8" fill="none"/>
+                        </svg>
+                        <div class="leading-none">
+                            <div class="font-display text-2xl font-semibold tracking-wide">MARVIT</div>
+                            <div class="text-[9px] tracking-widest-plus mt-1" style="color: var(--gold);">EXCELLENCE</div>
+                        </div>
+                    </div>
+                    <p class="font-display italic text-lg leading-snug max-w-xs" style="color: rgba(245,243,238,0.85);">
+                        Construindo hoje,<br>realizando o <span style="color: var(--gold);">amanhã</span>.
+                    </p>
+                </div>
+
+                <!-- Links rápidos -->
+                <div class="col-span-6 lg:col-span-2 lg:col-start-6">
+                    <div class="text-[10px] tracking-widest-plus uppercase mb-6" style="color: var(--gold);">Navegação</div>
+                    <ul class="space-y-3 text-sm font-light">
+                        <li><a href="#home" class="hover:text-[--gold] transition">Home</a></li>
+                        <li><a href="#sobre" class="hover:text-[--gold] transition">Sobre Nós</a></li>
+                        <li><a href="#servicos" class="hover:text-[--gold] transition">Serviços</a></li>
+                        <li><a href="#portfolio" class="hover:text-[--gold] transition">Portfólio</a></li>
+                        <li><a href="#contato" class="hover:text-[--gold] transition">Contato</a></li>
+                    </ul>
+                </div>
+
+                <!-- Serviços -->
+                <div class="col-span-6 lg:col-span-3">
+                    <div class="text-[10px] tracking-widest-plus uppercase mb-6" style="color: var(--gold);">Serviços</div>
+                    <ul class="space-y-3 text-sm font-light">
+                        <li><a href="#servicos" class="hover:text-[--gold] transition">Construção Residencial</a></li>
+                        <li><a href="#servicos" class="hover:text-[--gold] transition">Reformas Comerciais</a></li>
+                        <li><a href="#servicos" class="hover:text-[--gold] transition">Gerenciamento de Obras</a></li>
+                        <li><a href="#servicos" class="hover:text-[--gold] transition">Design de Interiores</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contato Direto -->
+                <div class="col-span-12 lg:col-span-3">
+                    <div class="text-[10px] tracking-widest-plus uppercase mb-6" style="color: var(--gold);">Contato Direto</div>
+                    <ul class="space-y-4 text-sm font-light">
+                        <li>
+                            <a href="https://wa.me/5591982516477" target="_blank" class="flex items-center gap-3 hover:text-[--gold] transition group">
+                                <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                                </svg>
+                                <span>(19) 99965-9191</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="mailto:contato@marvitexcellence.com.br" class="flex items-center gap-3 hover:text-[--gold] transition">
+                                <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                    <polyline points="22,6 12,13 2,6"/>
+                                </svg>
+                                <span class="break-all">contato@marvitexcellence.com.br</span>
+                            </a>
+                        </li>
+                        <li class="flex items-start gap-3 pt-2">
+                            <svg class="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                            <span style="color: rgba(245,243,238,0.85);">
+                                Av. Rosa Belmiro Ramos, 811<br>
+                                Valinhos/SP — 13275-400
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom do footer -->
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pt-10">
+                <div class="text-xs font-light" style="color: rgba(245,243,238,0.7);">
+                    © 2026 Construtora Marvit Excellence. Todos os direitos reservados.
+                </div>
+                <div class="text-[10px] tracking-widest-plus uppercase font-medium" style="color: rgba(245,243,238,0.7);">
+                    CNPJ: 64.820.084/0001-92
+                </div>
+                <div class="flex gap-6 text-xs font-light" style="color: rgba(245,243,238,0.7);">
+                    <a href="#" class="hover:text-[--gold] transition">Política de Privacidade</a>
+                    <a href="#" class="hover:text-[--gold] transition">Termos de Uso</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================
+         [JS] JAVASCRIPT — Interatividade do Site
+         ============================================
+         Vanilla JS (sem frameworks). Todas as funções
+         são executadas após o DOM estar pronto.
+         ============================================ -->
+    <script>
+        /* ════════════════════════════════════════════════
+         * [JS-01] NAVBAR DINÂMICO
+         * ────────────────────────────────────────────────
+         * O header começa transparente sobre o Hero.
+         * Ao rolar mais de 80px, ganha fundo escuro com
+         * blur — comportamento "frosted glass" comum em
+         * sites premium. Melhora legibilidade dos links
+         * quando o usuário está em seções de fundo claro.
+         * ════════════════════════════════════════════════ */
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 80) {
+                // Estado "rolado": fundo escuro com blur de 12px
+                navbar.style.background = 'rgba(5, 10, 22, 0.92)';
+                navbar.style.backdropFilter = 'blur(12px)';
+                navbar.style.borderBottom = '1px solid rgba(245,243,238,0.08)';
+            } else {
+                // Estado inicial: totalmente transparente sobre o Hero
+                navbar.style.background = 'rgba(5, 10, 22, 0)';
+                navbar.style.backdropFilter = 'blur(0px)';
+                navbar.style.borderBottom = 'none';
+            }
+        });
+
+        /* ════════════════════════════════════════════════
+         * [JS-02] MENU MOBILE
+         * ────────────────────────────────────────────────
+         * No desktop os links ficam visíveis no navbar.
+         * No mobile (<1024px), aparece um botão "hambúrguer"
+         * que abre um overlay full-screen com a navegação.
+         *
+         * Estados:
+         *   - .open (classe ativa) → menu visível
+         *   - sem classe → menu escondido (translateX(100%))
+         *
+         * Eventos:
+         *   - Clique no hambúrguer → adiciona .open
+         *   - Clique no "×" → remove .open
+         *   - Clique em qualquer link → remove .open (fecha após navegar)
+         * ════════════════════════════════════════════════ */
+        const mobileToggle = document.getElementById('mobile-toggle');
+        const mobileClose = document.getElementById('mobile-close');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        mobileToggle.addEventListener('click', () => mobileMenu.classList.add('open'));
+        mobileClose.addEventListener('click', () => mobileMenu.classList.remove('open'));
+        mobileLinks.forEach(link => link.addEventListener('click', () => mobileMenu.classList.remove('open')));
+
+        /* ════════════════════════════════════════════════
+         * [JS-03] ANIMAÇÃO DE ENTRADA AO ROLAR (Reveal)
+         * ────────────────────────────────────────────────
+         * Elementos com a classe .reveal começam invisíveis
+         * (opacity:0, translateY:30px). Quando entram na
+         * viewport, recebem a classe .in-view e animam pra
+         * sua posição final.
+         *
+         * Usa Intersection Observer (API nativa, performática).
+         * Cada elemento é "desobservado" depois da animação
+         * pra não rodar de novo se o usuário voltar a rolar.
+         *
+         * Configuração:
+         *   - threshold: 0.12  → dispara quando 12% do elemento aparece
+         *   - rootMargin: -60px → antecipa em 60px no scroll
+         * ════════════════════════════════════════════════ */
+        const revealElements = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    observer.unobserve(entry.target); // anima uma vez só
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+        revealElements.forEach(el => observer.observe(el));
+
+        /* ════════════════════════════════════════════════
+         * [JS-04] CARROSSEL DE DEPOIMENTOS
+         * ────────────────────────────────────────────────
+         * 3 slides empilhados horizontalmente em um track.
+         * O track inteiro se move com transform: translateX
+         * (não muda o DOM, só desliza — bem performático).
+         *
+         * Controles:
+         *   - Botão "Anterior" / "Próximo"
+         *   - Dots (clicáveis pra ir direto a um slide)
+         *   - Auto-play a cada 7 segundos
+         *
+         * Truque do `(index + totalSlides) % totalSlides`:
+         *   permite navegação cíclica (loop infinito).
+         *   Ex: estando no slide 0, ir pra -1 vira slide 2.
+         * ════════════════════════════════════════════════ */
+        const track = document.getElementById('testimonial-track');
+        const dots = document.querySelectorAll('.dot');
+        const prevBtn = document.getElementById('prev-testimonial');
+        const nextBtn = document.getElementById('next-testimonial');
+        let currentSlide = 0;
+        const totalSlides = 3;
+
+        /**
+         * Navega para um slide específico do carrossel.
+         * @param {number} index - Índice do slide alvo (pode ser negativo, faz wrap automático)
+         */
+        function goToSlide(index) {
+            // Wrap circular: -1 vira último slide, total vira o primeiro
+            currentSlide = (index + totalSlides) % totalSlides;
+
+            // Desloca o track para mostrar o slide desejado
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+            // Atualiza visual dos dots (ativo fica maior e mais opaco)
+            dots.forEach((dot, i) => {
+                dot.style.opacity = i === currentSlide ? '1' : '0.2';
+                dot.style.width = i === currentSlide ? '32px' : '16px';
+            });
+        }
+
+        prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+        nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+        dots.forEach(dot => dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.index))));
+
+        // Auto-play: avança automaticamente a cada 7 segundos
+        setInterval(() => goToSlide(currentSlide + 1), 7000);
+
+        /* ════════════════════════════════════════════════
+         * [JS-05] SMOOTH SCROLL (rolagem suave)
+         * ────────────────────────────────────────────────
+         * Intercepta cliques em links âncora (#home, #sobre etc.)
+         * e usa window.scrollTo com behavior:'smooth' em vez
+         * do "salto" instantâneo padrão do navegador.
+         *
+         * Aplica a TODOS os links que começam com "#" (navbar,
+         * menu mobile, footer, botões internos).
+         * ════════════════════════════════════════════════ */
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: target.offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        /* ════════════════════════════════════════════════
+         * [JS-06] FORMULÁRIO → WHATSAPP
+         * ────────────────────────────────────────────────
+         * Quando o usuário envia o formulário de orçamento,
+         * NÃO mandamos os dados para um servidor. Em vez disso:
+         *
+         *   1. Coletamos os campos preenchidos
+         *   2. Montamos uma mensagem formatada (negrito,
+         *      itálico, emojis — sintaxe do WhatsApp)
+         *   3. Abrimos uma URL https://wa.me/{numero}?text=...
+         *      que abre o WhatsApp Web/App com a mensagem
+         *      pronta para o cliente apenas apertar "Enviar"
+         *
+         * Vantagem: zero backend, zero custo, funciona em
+         * qualquer hospedagem estática (Vercel, Netlify, etc.).
+         *
+         * Limitação: se o cliente desistir antes de apertar
+         * "Enviar" no WhatsApp, esse lead não é capturado.
+         *
+         * ⚠️ PARA TROCAR O NÚMERO: edite a constante abaixo.
+         *    Formato: código do país + DDD + número (sem + ou espaços)
+         * ════════════════════════════════════════════════ */
+        const WHATSAPP_NUMBER = '5591982516477'; // +55 (91) 98251-6477
+
+        const quoteForm = document.getElementById('quote-form');
+        quoteForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // impede o reload padrão da página
+
+            // ── Passo 1: Coletar dados dos campos ──
+            const nome = document.getElementById('nome').value.trim();
+            const telefone = document.getElementById('telefone').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const projeto = document.querySelector('input[name="project"]:checked')?.value || 'Não especificado';
+            const mensagem = document.getElementById('mensagem').value.trim();
+
+            // ── Passo 2: Montar mensagem formatada ──
+            // Sintaxe WhatsApp: *negrito*, _itálico_, \n = quebra de linha
+            const texto =
+                `*Nova Solicitação de Orçamento*\n` +
+                `_via site Marvit Excellence_\n\n` +
+                `👤 *Nome:* ${nome}\n` +
+                `📱 *Telefone:* ${telefone}\n` +
+                `✉️ *E-mail:* ${email}\n` +
+                `🏗️ *Tipo de Projeto:* ${projeto}\n\n` +
+                `📝 *Detalhes do Projeto:*\n${mensagem}`;
+
+            // ── Passo 3: Abrir WhatsApp em nova aba ──
+            // encodeURIComponent converte caracteres especiais
+            // (espaços, acentos, emojis) em formato seguro pra URL
+            const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(texto)}`;
+            window.open(url, '_blank');
+        });
+
+        /* ════════════════════════════════════════════════
+         * [JS-07] BOTÃO FLUTUANTE DE WHATSAPP
+         * ────────────────────────────────────────────────
+         * Aparece no canto inferior direito após o usuário
+         * rolar mais de 400px. Não aparece logo de cara pra
+         * não poluir o Hero — só depois que o visitante já
+         * começou a se interessar pelo conteúdo.
+         *
+         * O botão em si está no HTML com href direto pro
+         * WhatsApp (funciona mesmo se o JS estiver desativado).
+         * Este script controla apenas a visibilidade.
+         * ════════════════════════════════════════════════ */
+        const floatBtn = document.getElementById('whatsapp-float');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                floatBtn.classList.add('visible');
+            } else {
+                floatBtn.classList.remove('visible');
+            }
+        });
+
+    </script>
+
+    <!-- ============================================
+         [09] BOTÃO FLUTUANTE DE WHATSAPP
+         ============================================
+         Link fixo no canto inferior direito que aparece
+         após rolar 400px. Vai direto à conversa do
+         WhatsApp com uma mensagem pré-preenchida.
+         Tem efeito de pulso animado (CSS) pra chamar atenção.
+         ============================================ -->
+    <a id="whatsapp-float" class="whatsapp-float"
+       href="https://wa.me/5591982516477?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20Marvit%20Excellence%20e%20gostaria%20de%20conversar%20sobre%20um%20projeto."
+       target="_blank"
+       aria-label="Falar no WhatsApp">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+        </svg>
+    </a>
+
+</body>
+</html>
