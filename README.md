@@ -30,7 +30,7 @@ Single-page institucional com 8 seções principais, design editorial-arquitetô
 **Cliente:** Construtora Marvit Excellence
 **Endereço:** Avenida Rosa Belmiro Ramos, 811 — Valinhos/SP — CEP 13275-400
 **CNPJ:** 64.820.084/0001-92
-**Telefone:** (19) 99965-9191
+**Telefone:** (19) 98848-9722
 
 ### Seções do site
 
@@ -149,16 +149,16 @@ O arquivo `index.html` está organizado com **índices `[XX]` em todos os coment
 Em `index.html`, busque por `WHATSAPP_NUMBER` (linha ~1455):
 
 ```javascript
-const WHATSAPP_NUMBER = '5591982516477'; // ← edite aqui
+const WHATSAPP_NUMBER = '5519988489722'; // ← edite aqui
 ```
 
 > **Formato:** código do país + DDD + número, **sem `+`, espaços ou traços**.
-> Exemplo: `+55 (91) 98251-6477` → `5591982516477`
+> Exemplo: `+55 (19) 98848-9722` → `5519988489722`
 
 Lembre-se de atualizar também o `href` do **botão flutuante** (linha ~1545):
 
 ```html
-<a id="whatsapp-float" href="https://wa.me/5591982516477?text=...">
+<a id="whatsapp-float" href="https://wa.me/5519988489722?text=...">
 ```
 
 ### Alterar a paleta de cores

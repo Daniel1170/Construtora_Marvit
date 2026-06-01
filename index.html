@@ -359,11 +359,13 @@
         }
 
         /* Mobile menu */
-        .mobile-menu {
+        #mobile-menu.mobile-menu {
             transform: translateX(100%);
             transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+            background-color: #050a16 !important;
+            overflow-y: auto;
         }
-        .mobile-menu.open {
+        #mobile-menu.mobile-menu.open {
             transform: translateX(0);
         }
 
@@ -525,33 +527,35 @@
                 </button>
             </div>
         </div>
+    </header>
 
-        <!-- Menu Mobile -->
-        <div id="mobile-menu" class="mobile-menu fixed inset-0 z-50 lg:hidden" style="background: var(--ink-deep);">
-            <div class="flex flex-col h-full p-8">
-                <div class="flex justify-end">
-                    <button id="mobile-close" class="text-3xl font-light p-2" style="color: var(--paper);">×</button>
-                </div>
-                <nav class="flex flex-col gap-6 mt-12" style="color: var(--paper);">
-                    <a href="#home" class="font-display text-3xl mobile-link">Home</a>
-                    <a href="#sobre" class="font-display text-3xl mobile-link">Sobre Nós</a>
-                    <a href="#servicos" class="font-display text-3xl mobile-link">Serviços</a>
-                    <a href="#portfolio" class="font-display text-3xl mobile-link">Portfólio</a>
-                    <a href="#contato" class="font-display text-3xl mobile-link">Contato</a>
-                </nav>
-                <div class="mt-auto pt-10 border-t" style="border-color: var(--rule);">
-                    <a href="#contato" class="btn-gold mobile-link">
-                        <span>Solicitar Orçamento</span>
-                        <span class="arrow">→</span>
-                    </a>
-                    <div class="mt-8 text-xs tracking-wider" style="color: var(--muted);">
-                        <p>(19) 99965-9191</p>
-                        <p class="mt-2">Valinhos/SP</p>
-                    </div>
+    <!-- Menu Mobile (fora do <header> para que `fixed inset-0`
+         seja relativo à viewport — o backdrop-filter do header
+         criaria um contexto de contenção e prenderia o menu) -->
+    <div id="mobile-menu" class="mobile-menu fixed inset-0 z-[60] lg:hidden">
+        <div class="flex flex-col min-h-full p-8">
+            <div class="flex justify-end">
+                <button id="mobile-close" class="text-3xl font-light p-2" style="color: var(--paper);">×</button>
+            </div>
+            <nav class="flex flex-col gap-6 mt-12" style="color: var(--paper);">
+                <a href="#home" class="font-display text-3xl mobile-link">Home</a>
+                <a href="#sobre" class="font-display text-3xl mobile-link">Sobre Nós</a>
+                <a href="#servicos" class="font-display text-3xl mobile-link">Serviços</a>
+                <a href="#portfolio" class="font-display text-3xl mobile-link">Portfólio</a>
+                <a href="#contato" class="font-display text-3xl mobile-link">Contato</a>
+            </nav>
+            <div class="mt-auto pt-10 border-t" style="border-color: var(--rule);">
+                <a href="#contato" class="btn-gold mobile-link">
+                    <span>Solicitar Orçamento</span>
+                    <span class="arrow">→</span>
+                </a>
+                <div class="mt-8 text-xs tracking-wider" style="color: var(--muted);">
+                    <p>(19) 98848-9722</p>
+                    <p class="mt-2">Valinhos/SP</p>
                 </div>
             </div>
         </div>
-    </header>
+    </div>
 
     <!-- ============================================
          [02] SEÇÃO HERO — Destaque Principal
@@ -625,7 +629,7 @@
                             <div class="text-[10px] tracking-widest-plus uppercase mt-2 font-medium" style="color: rgba(245,243,238,0.85);">Anos de Mercado</div>
                         </div>
                         <div>
-                            <div class="font-display text-4xl lg:text-5xl font-semibold" style="color: var(--paper);">9</div>
+                            <div class="font-display text-4xl lg:text-5xl font-semibold" style="color: var(--paper);">+20</div>
                             <div class="text-[10px] tracking-widest-plus uppercase mt-2 font-medium" style="color: rgba(245,243,238,0.85);">Clientes Corporativos</div>
                         </div>
                         <div>
@@ -640,13 +644,6 @@
                 </div>
             </div>
 
-            <!-- Indicador de scroll -->
-            <div class="absolute bottom-8 right-6 lg:right-12 flex flex-col items-center gap-3 hero-meta">
-                <span class="text-[10px] tracking-widest-plus uppercase font-medium" style="color: rgba(245,243,238,0.75);">Role</span>
-                <div class="w-px h-12 overflow-hidden" style="background: rgba(245,243,238,0.2);">
-                    <div class="w-px h-4 scroll-dot" style="background: var(--gold);"></div>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -1177,7 +1174,7 @@
                             </div>
                             <div>
                                 <div class="text-[10px] tracking-widest-plus uppercase mb-1" style="color: var(--gold);">Telefone</div>
-                                <div class="text-sm font-light">(19) 99965-9191</div>
+                                <div class="text-sm font-light">(19) 98848-9722</div>
                             </div>
                         </div>
 
@@ -1310,11 +1307,11 @@
                     <div class="text-[10px] tracking-widest-plus uppercase mb-6" style="color: var(--gold);">Contato Direto</div>
                     <ul class="space-y-4 text-sm font-light">
                         <li>
-                            <a href="https://wa.me/5591982516477" target="_blank" class="flex items-center gap-3 hover:text-[--gold] transition group">
+                            <a href="https://wa.me/5519988489722" target="_blank" class="flex items-center gap-3 hover:text-[--gold] transition group">
                                 <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
                                 </svg>
-                                <span>(19) 99965-9191</span>
+                                <span>(19) 98848-9722</span>
                             </a>
                         </li>
                         <li>
@@ -1533,7 +1530,7 @@
          * ⚠️ PARA TROCAR O NÚMERO: edite a constante abaixo.
          *    Formato: código do país + DDD + número (sem + ou espaços)
          * ════════════════════════════════════════════════ */
-        const WHATSAPP_NUMBER = '5591982516477'; // +55 (91) 98251-6477
+        const WHATSAPP_NUMBER = '5519988489722'; // +55 (19) 98848-9722 — Marcos Barreto
 
         const quoteForm = document.getElementById('quote-form');
         quoteForm.addEventListener('submit', function(e) {
@@ -1596,7 +1593,7 @@
          Tem efeito de pulso animado (CSS) pra chamar atenção.
          ============================================ -->
     <a id="whatsapp-float" class="whatsapp-float"
-       href="https://wa.me/5591982516477?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20Marvit%20Excellence%20e%20gostaria%20de%20conversar%20sobre%20um%20projeto."
+       href="https://wa.me/5519988489722?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20Marvit%20Excellence%20e%20gostaria%20de%20conversar%20sobre%20um%20projeto."
        target="_blank"
        aria-label="Falar no WhatsApp">
         <svg viewBox="0 0 24 24" fill="currentColor">
