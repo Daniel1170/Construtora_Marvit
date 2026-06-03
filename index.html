@@ -243,8 +243,8 @@
         .service-card:hover .service-title,
         .service-card:hover .service-text,
         .service-card:hover .service-number,
-        .service-card:hover .service-arrow { color: var(--paper); }
-        .service-card:hover .service-number { color: var(--gold); }
+        .service-card:hover .service-arrow { color: var(--paper) !important; }
+        .service-card:hover .service-number { color: var(--gold) !important; }
         .service-card:hover .service-divider { background: rgba(245,243,238,0.2); }
         .service-divider { transition: background 0.5s ease; }
 
@@ -279,7 +279,9 @@
             transform: translateY(20px);
             opacity: 0;
             transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+            text-shadow: 0 1px 12px rgba(5,10,22,0.85);
         }
+        .portfolio-item .caption > div:first-child { color: #ffffff !important; }
         .portfolio-item:hover .caption {
             transform: translateY(0);
             opacity: 1;
