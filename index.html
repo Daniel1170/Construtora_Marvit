@@ -18,7 +18,7 @@
     [02]     Hero — destaque principal
     [03]     Diferenciais / Sobre — 3 pilares
     [04]     Serviços — grid de 4 cards
-    [05]     Portfólio — 8 obras de 4 clientes
+    [05]     Portfólio — 8 obras + vídeos Antes/Agora (Embracon)
     [06]     Depoimentos + Carrossel + Marquee de Clientes
     [07]     CTA / Contato — formulário WhatsApp
     [08]     Footer
@@ -287,6 +287,114 @@
             opacity: 1;
         }
 
+        /* Bloco de vídeos Antes / Agora (portfólio)
+           - No desktop: os dois vídeos dividem a mesma altura de linha
+             e cada um mantém sua proporção natural (um é vertical,
+             o outro horizontal) — sem corte de imagem.
+           - No mobile: empilham em coluna, largura total, altura
+             automática pela proporção do próprio vídeo. */
+        .video-compare {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .video-frame {
+            position: relative;
+            overflow: hidden;
+            background: #05060b;
+            /* A moldura "abraça" o vídeo: sem tarjas preta nas laterais,
+               independente da orientação do arquivo. */
+            width: fit-content;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 0;
+        }
+        .video-frame video {
+            display: block;
+            width: auto;
+            max-width: 100%;
+            height: auto;
+            max-height: 72vh;
+        }
+        .video-frame .video-tag {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            z-index: 2;
+            padding: 6px 12px;
+            font-size: 9px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--paper);
+            background: rgba(5,10,22,0.65);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(197,164,109,0.5);
+        }
+        /* Botão de play (aparece quando o vídeo está pausado) */
+        .video-frame .video-play {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 0;
+            padding: 0;
+            cursor: pointer;
+            background: rgba(5,10,22,0.35);
+            transition: opacity 0.4s ease;
+        }
+        .video-frame.is-playing .video-play { opacity: 0; pointer-events: none; }
+        .video-frame .video-play span {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 1px solid rgba(197,164,109,0.8);
+            background: rgba(5,10,22,0.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.4s ease, transform 0.4s ease;
+        }
+        .video-frame .video-play:hover span {
+            background: rgba(197,164,109,0.9);
+            transform: scale(1.06);
+        }
+        .video-frame .video-play svg { width: 20px; height: 20px; fill: var(--paper); }
+        .video-frame .video-play:hover svg { fill: var(--ink); }
+        .video-caption {
+            margin-top: 14px;
+            line-height: 1.5;
+            text-align: center;
+        }
+        @media (min-width: 1024px) {
+            .video-caption { text-align: left; }
+            .video-compare {
+                /* Altura comum da "linha" de vídeos. min(540px, 36vw)
+                   garante que os dois lado a lado nunca estourem a
+                   largura do container (o horizontal é bem mais largo). */
+                --video-h: min(540px, 36vw);
+                flex-direction: row;
+                gap: 24px;
+                justify-content: center;
+                align-items: flex-start;
+            }
+            /* A largura de cada figure é calculada pela proporção real do
+               arquivo — assim o vídeo nunca distorce nem é cortado, e a
+               legenda não interfere na largura do bloco. */
+            .video-compare > figure { flex: 0 0 auto; min-width: 0; }
+            .video-compare > figure.is-portrait  { width: calc(var(--video-h) * 478 / 850); }
+            .video-compare > figure.is-landscape { width: calc(var(--video-h) * 848 / 478); }
+            .video-compare .video-frame { width: 100%; }
+            .video-compare .video-frame video {
+                width: 100%;
+                height: var(--video-h);
+                max-height: none;
+                object-fit: contain; /* rede de segurança contra distorção */
+            }
+        }
+
         /* Pilar — diferencial */
         .pillar-icon {
             width: 56px;
@@ -371,6 +479,41 @@
             transform: translateX(0);
         }
 
+        /* Tablet (>=640px): o menu vira uma gaveta lateral em vez de
+           ocupar a tela inteira. Em tela cheia o conteúdo ficava
+           grudado na esquerda com ~40% de vazio no meio. O
+           `left: auto` sobrescreve o `inset-0` do Tailwind. */
+        @media (min-width: 640px) {
+            #mobile-menu.mobile-menu {
+                left: auto;
+                width: 420px;
+                max-width: 100%;
+                box-shadow: -30px 0 80px rgba(0, 0, 0, 0.55);
+            }
+            /* Em telas altas (tablet) sobrava um bloco vazio no meio:
+               as margens automáticas distribuem o espaço livre em vez
+               de empilhar tudo no topo. */
+            #mobile-menu nav {
+                margin-top: auto;
+                margin-bottom: auto;
+            }
+        }
+
+        /* Fundo escurecido atrás da gaveta (também fecha o menu no clique) */
+        #mobile-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 55;
+            background: rgba(5, 10, 22, 0.6);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        #mobile-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
         /* Form inputs */
         .form-input {
             background: transparent;
@@ -422,7 +565,9 @@
             position: fixed;
             bottom: 32px;
             right: 32px;
-            z-index: 60;
+            /* Abaixo do menu mobile (60) e do seu fundo (55) — senão o
+               botão verde ficava flutuando POR CIMA do menu aberto. */
+            z-index: 40;
             width: 60px;
             height: 60px;
             border-radius: 50%;
@@ -522,7 +667,8 @@
                 </a>
 
                 <!-- Botão Mobile -->
-                <button id="mobile-toggle" class="lg:hidden flex flex-col gap-1.5 p-2" aria-label="Menu" style="color: var(--paper);">
+                <button id="mobile-toggle" class="lg:hidden flex flex-col gap-1.5 p-2" aria-label="Menu"
+                        aria-controls="mobile-menu" aria-expanded="false" style="color: var(--paper);">
                     <span class="w-6 h-px bg-current"></span>
                     <span class="w-6 h-px bg-current"></span>
                     <span class="w-4 h-px bg-current ml-auto"></span>
@@ -531,9 +677,13 @@
         </div>
     </header>
 
+    <!-- Fundo escurecido do menu mobile (clicar aqui fecha o menu) -->
+    <div id="mobile-backdrop" class="lg:hidden" aria-hidden="true"></div>
+
     <!-- Menu Mobile (fora do <header> para que `fixed inset-0`
          seja relativo à viewport — o backdrop-filter do header
-         criaria um contexto de contenção e prenderia o menu) -->
+         criaria um contexto de contenção e prenderia o menu).
+         No tablet o CSS transforma este painel numa gaveta de 420px. -->
     <div id="mobile-menu" class="mobile-menu fixed inset-0 z-[60] lg:hidden">
         <div class="flex flex-col min-h-full p-8">
             <div class="flex justify-end">
@@ -977,6 +1127,76 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ============ BLOCO DE VÍDEOS — EMBRACON VALINHOS ============
+                 Comparativo "Antes / Agora" em vídeo da recuperação das
+                 calhas (limpeza, consertos e pintura).
+                 Os dois arquivos têm orientações diferentes (o "Antes" é
+                 vertical, o "Agora" é horizontal), por isso o layout usa
+                 altura comum + proporção natural em vez de recorte.
+                 Reprodução controlada por [JS-08]:
+                   - muted + playsinline + loop (autoplay liberado no iOS)
+                   - preload="metadata" → não baixa o vídeo até tocar
+                   - no celular / reduced-motion só toca se o usuário tocar
+                 ============================================================ -->
+            <div class="mt-20 lg:mt-28 reveal">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+                    <div>
+                        <div class="text-[10px] tracking-widest-plus uppercase mb-3" style="color: var(--gold);">Antes &amp; Agora · Embracon Valinhos</div>
+                        <h3 class="font-display font-light leading-[1.1]" style="font-size: clamp(1.75rem, 3.2vw, 2.75rem);">
+                            A transformação <em class="italic" style="color: var(--gold);">em movimento</em>.
+                        </h3>
+                    </div>
+                    <p class="text-sm font-light max-w-sm sm:text-right" style="color: rgba(245,243,238,0.7);">
+                        Recuperação das calhas da unidade Embracon em Valinhos/SP —
+                        limpeza completa, consertos e pintura.
+                    </p>
+                </div>
+
+                <div class="video-compare">
+                    <!-- ANTES (vídeo vertical — 478x850) -->
+                    <figure class="is-portrait">
+                        <div class="video-frame" data-video-frame>
+                            <span class="video-tag">Antes</span>
+                            <button type="button" class="video-play" aria-label="Reproduzir vídeo: calha da Embracon Valinhos antes da limpeza">
+                                <span>
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                                </span>
+                            </button>
+                            <video
+                                src="img/embracon-valinhos-antes.mp4"
+                                muted loop playsinline preload="metadata"
+                                width="478" height="850"
+                                aria-label="Vídeo da calha da unidade Embracon Valinhos antes da limpeza, com acúmulo de sujeira"></video>
+                        </div>
+                        <figcaption class="video-caption text-sm font-light" style="color: rgba(245,243,238,0.7);">
+                            <span class="font-display text-lg" style="color: var(--paper);">Como encontramos</span><br>
+                            Calha com forte acúmulo de sujeira e pontos que pediam conserto.
+                        </figcaption>
+                    </figure>
+
+                    <!-- AGORA (vídeo horizontal — 848x478) -->
+                    <figure class="is-landscape">
+                        <div class="video-frame" data-video-frame>
+                            <span class="video-tag">Agora</span>
+                            <button type="button" class="video-play" aria-label="Reproduzir vídeo: calha da Embracon Valinhos depois da limpeza, consertos e pintura">
+                                <span>
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                                </span>
+                            </button>
+                            <video
+                                src="img/embracon-valinhos-agora.mp4"
+                                muted loop playsinline preload="metadata"
+                                width="848" height="478"
+                                aria-label="Vídeo da calha da unidade Embracon Valinhos depois da limpeza, dos consertos e da pintura"></video>
+                        </div>
+                        <figcaption class="video-caption text-sm font-light" style="color: rgba(245,243,238,0.7);">
+                            <span class="font-display text-lg" style="color: var(--paper);">Como entregamos</span><br>
+                            Calha limpa, consertada e pintada — escoamento livre outra vez.
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -984,9 +1204,9 @@
          [06] SEÇÃO DEPOIMENTOS + CLIENTES
          ============================================
          Duas partes:
-           1. Carrossel de 3 depoimentos (Kadant, Symrise,
-              Leroy Merlin) — controlado por [JS-04]
-           2. Marquee de logos/nomes dos 9 clientes em
+           1. Carrossel de 4 depoimentos (Kadant, Symrise,
+              Leroy Merlin, Embracon) — controlado por [JS-04]
+           2. Marquee de logos/nomes dos 10 clientes em
               loop infinito (animação CSS pura)
          ============================================ -->
     <section class="relative py-28 lg:py-40" style="background: var(--paper);">
@@ -1017,10 +1237,7 @@
                                 </p>
                                 <div class="flex items-center justify-center gap-4">
                                     <span class="w-10 h-px" style="background: var(--gold);"></span>
-                                    <div>
-                                        <div class="font-medium text-sm" style="color: var(--ink);">R. M.</div>
-                                        <div class="text-xs tracking-wider uppercase mt-1" style="color: var(--muted);">Engenharia de Manutenção · Kadant</div>
-                                    </div>
+                                    <div class="text-xs tracking-wider uppercase" style="color: var(--ink);">Kadant</div>
                                     <span class="w-10 h-px" style="background: var(--gold);"></span>
                                 </div>
                             </div>
@@ -1037,10 +1254,7 @@
                                 </p>
                                 <div class="flex items-center justify-center gap-4">
                                     <span class="w-10 h-px" style="background: var(--gold);"></span>
-                                    <div>
-                                        <div class="font-medium text-sm" style="color: var(--ink);">C. T.</div>
-                                        <div class="text-xs tracking-wider uppercase mt-1" style="color: var(--muted);">Coordenação de Facilities · Symrise Citratus</div>
-                                    </div>
+                                    <div class="text-xs tracking-wider uppercase" style="color: var(--ink);">Symrise Citratus</div>
                                     <span class="w-10 h-px" style="background: var(--gold);"></span>
                                 </div>
                             </div>
@@ -1057,10 +1271,24 @@
                                 </p>
                                 <div class="flex items-center justify-center gap-4">
                                     <span class="w-10 h-px" style="background: var(--gold);"></span>
-                                    <div>
-                                        <div class="font-medium text-sm" style="color: var(--ink);">F. A.</div>
-                                        <div class="text-xs tracking-wider uppercase mt-1" style="color: var(--muted);">Gerência de Obras · Leroy Merlin</div>
-                                    </div>
+                                    <div class="text-xs tracking-wider uppercase" style="color: var(--ink);">Leroy Merlin</div>
+                                    <span class="w-10 h-px" style="background: var(--gold);"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Depoimento 4 — EMBRACON VALINHOS (calhas: limpeza, conserto e pintura) -->
+                        <div class="testimonial-slide">
+                            <div class="text-center">
+                                <div class="font-display text-6xl lg:text-7xl leading-none mb-8" style="color: var(--gold);">"</div>
+                                <p class="font-display italic font-light leading-snug mb-10" style="font-size: clamp(1.3rem, 2.5vw, 2rem); color: var(--ink);">
+                                    Nossas calhas estavam muito sujas e precisavam de conserto e pintura.
+                                    A Marvit entregou tudo em um prazo muito mais curto do que imaginávamos —
+                                    a rapidez nos surpreendeu, e o acabamento veio no mesmo nível da agilidade.
+                                </p>
+                                <div class="flex items-center justify-center gap-4">
+                                    <span class="w-10 h-px" style="background: var(--gold);"></span>
+                                    <div class="text-xs tracking-wider uppercase" style="color: var(--ink);">Embracon · Valinhos/SP</div>
                                     <span class="w-10 h-px" style="background: var(--gold);"></span>
                                 </div>
                             </div>
@@ -1078,6 +1306,7 @@
                         <button class="dot w-8 h-px transition-all duration-500" data-index="0" style="background: var(--ink);"></button>
                         <button class="dot w-8 h-px transition-all duration-500 opacity-20" data-index="1" style="background: var(--ink);"></button>
                         <button class="dot w-8 h-px transition-all duration-500 opacity-20" data-index="2" style="background: var(--ink);"></button>
+                        <button class="dot w-8 h-px transition-all duration-500 opacity-20" data-index="3" style="background: var(--ink);"></button>
                     </div>
                     <button id="next-testimonial" class="group flex items-center gap-2 text-xs tracking-widest-plus uppercase" style="color: var(--ink);">
                         <span>Próximo</span>
@@ -1107,6 +1336,7 @@
                         <div class="font-display text-2xl lg:text-3xl italic font-light whitespace-nowrap opacity-50">Hidro All</div>
                         <div class="font-display text-2xl lg:text-3xl whitespace-nowrap opacity-50 tracking-widest-plus">CLICHER LUX</div>
                         <div class="font-display text-2xl lg:text-3xl italic font-light whitespace-nowrap opacity-50">Leroy Merlin</div>
+                        <div class="font-display text-2xl lg:text-3xl whitespace-nowrap opacity-50 tracking-wider">EMBRACON VALINHOS</div>
                         <!-- Duplicado para loop infinito -->
                         <div class="font-display text-2xl lg:text-3xl whitespace-nowrap opacity-50 tracking-widest-plus">KADANT</div>
                         <div class="font-display text-2xl lg:text-3xl italic font-light whitespace-nowrap opacity-50">Fluidra do Brasil</div>
@@ -1117,6 +1347,7 @@
                         <div class="font-display text-2xl lg:text-3xl italic font-light whitespace-nowrap opacity-50">Hidro All</div>
                         <div class="font-display text-2xl lg:text-3xl whitespace-nowrap opacity-50 tracking-widest-plus">CLICHER LUX</div>
                         <div class="font-display text-2xl lg:text-3xl italic font-light whitespace-nowrap opacity-50">Leroy Merlin</div>
+                        <div class="font-display text-2xl lg:text-3xl whitespace-nowrap opacity-50 tracking-wider">EMBRACON VALINHOS</div>
                     </div>
                 </div>
             </div>
@@ -1389,27 +1620,61 @@
         /* ════════════════════════════════════════════════
          * [JS-02] MENU MOBILE
          * ────────────────────────────────────────────────
-         * No desktop os links ficam visíveis no navbar.
-         * No mobile (<1024px), aparece um botão "hambúrguer"
-         * que abre um overlay full-screen com a navegação.
+         * No desktop (>=1024px) os links ficam visíveis no navbar.
+         * Abaixo disso aparece o botão "hambúrguer", que abre:
+         *   - no celular: um painel de tela cheia
+         *   - no tablet:  uma gaveta lateral de 420px (ver CSS)
+         * ...com um fundo escurecido (#mobile-backdrop) atrás.
          *
          * Estados:
-         *   - .open (classe ativa) → menu visível
+         *   - .open no menu E no fundo → menu visível
          *   - sem classe → menu escondido (translateX(100%))
          *
-         * Eventos:
-         *   - Clique no hambúrguer → adiciona .open
-         *   - Clique no "×" → remove .open
-         *   - Clique em qualquer link → remove .open (fecha após navegar)
+         * Fecha por: "×", clique em um link, clique no fundo
+         * escurecido, tecla Esc, ou ao passar para o desktop
+         * (se o aparelho for girado, o menu não pode ficar
+         * "preso" aberto e reaparecer depois).
+         *
+         * Enquanto aberto, a rolagem da página é travada — antes
+         * o conteúdo rolava atrás do menu.
          * ════════════════════════════════════════════════ */
         const mobileToggle = document.getElementById('mobile-toggle');
         const mobileClose = document.getElementById('mobile-close');
         const mobileMenu = document.getElementById('mobile-menu');
+        const mobileBackdrop = document.getElementById('mobile-backdrop');
         const mobileLinks = document.querySelectorAll('.mobile-link');
 
-        mobileToggle.addEventListener('click', () => mobileMenu.classList.add('open'));
-        mobileClose.addEventListener('click', () => mobileMenu.classList.remove('open'));
-        mobileLinks.forEach(link => link.addEventListener('click', () => mobileMenu.classList.remove('open')));
+        function openMobileMenu() {
+            mobileMenu.classList.add('open');
+            mobileBackdrop.classList.add('open');
+            document.body.style.overflow = 'hidden';   // trava a rolagem do fundo
+            mobileToggle.setAttribute('aria-expanded', 'true');
+        }
+
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('open');
+            mobileBackdrop.classList.remove('open');
+            document.body.style.overflow = '';         // volta ao normal
+            mobileToggle.setAttribute('aria-expanded', 'false');
+        }
+
+        mobileToggle.addEventListener('click', openMobileMenu);
+        mobileClose.addEventListener('click', closeMobileMenu);
+        mobileBackdrop.addEventListener('click', closeMobileMenu);
+        mobileLinks.forEach(link => link.addEventListener('click', closeMobileMenu));
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileMenu.classList.contains('open')) closeMobileMenu();
+        });
+
+        // Ao chegar no desktop (ou girar o tablet), fecha e destrava a rolagem
+        const desktopQuery = window.matchMedia('(min-width: 1024px)');
+        const onDesktopChange = (e) => { if (e.matches) closeMobileMenu(); };
+        if (desktopQuery.addEventListener) {
+            desktopQuery.addEventListener('change', onDesktopChange);
+        } else {
+            desktopQuery.addListener(onDesktopChange); // Safari antigo
+        }
 
         /* ════════════════════════════════════════════════
          * [JS-03] ANIMAÇÃO DE ENTRADA AO ROLAR (Reveal)
@@ -1442,7 +1707,7 @@
         /* ════════════════════════════════════════════════
          * [JS-04] CARROSSEL DE DEPOIMENTOS
          * ────────────────────────────────────────────────
-         * 3 slides empilhados horizontalmente em um track.
+         * 4 slides empilhados horizontalmente em um track.
          * O track inteiro se move com transform: translateX
          * (não muda o DOM, só desliza — bem performático).
          *
@@ -1460,7 +1725,9 @@
         const prevBtn = document.getElementById('prev-testimonial');
         const nextBtn = document.getElementById('next-testimonial');
         let currentSlide = 0;
-        const totalSlides = 3;
+        // Contado direto do HTML: ao adicionar/remover um depoimento não
+        // é preciso mexer aqui (só nos dots).
+        const totalSlides = track.children.length;
 
         /**
          * Navega para um slide específico do carrossel.
@@ -1583,6 +1850,87 @@
                 floatBtn.classList.remove('visible');
             }
         });
+
+        /* ════════════════════════════════════════════════
+         * [JS-08] VÍDEOS ANTES / AGORA (Portfólio)
+         * ────────────────────────────────────────────────
+         * Cuida da reprodução dos vídeos da Embracon Valinhos
+         * de forma leve e previsível:
+         *
+         *   - Os vídeos são muted + loop + playsinline, então
+         *     o autoplay é permitido também no iOS/Android.
+         *   - preload="metadata": o arquivo só é baixado quando
+         *     realmente começa a tocar (economiza dados).
+         *   - Autoplay só acontece em telas grandes (>=1024px) e
+         *     se o usuário não pediu "menos animações". No celular
+         *     ou com reduced-motion, o vídeo espera um toque —
+         *     ninguém gasta 10 MB de dados sem querer.
+         *   - Sai da tela → pausa (não fica consumindo CPU/bateria).
+         *   - Clique no vídeo (ou no botão de play) alterna
+         *     play/pause. Depois que o usuário decide pausar,
+         *     o autoplay não força a reprodução de novo.
+         *   - Se o navegador não suportar IntersectionObserver,
+         *     o vídeo simplesmente fica com o botão de play.
+         * ════════════════════════════════════════════════ */
+        (() => {
+            const frames = document.querySelectorAll('[data-video-frame]');
+            if (!frames.length) return;
+
+            // Avaliado na hora de tocar (e não uma vez só no carregamento),
+            // pra continuar correto se o usuário girar o aparelho ou
+            // redimensionar a janela.
+            const canAutoplay = () =>
+                window.matchMedia('(min-width: 1024px)').matches &&
+                !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            frames.forEach(frame => {
+                const video = frame.querySelector('video');
+                const playBtn = frame.querySelector('.video-play');
+                if (!video) return;
+
+                let pausedByUser = false;
+
+                const play = () => {
+                    const attempt = video.play();
+                    // play() devolve Promise nos navegadores modernos —
+                    // se o browser bloquear, mantemos o botão de play.
+                    if (attempt && typeof attempt.catch === 'function') {
+                        attempt.catch(() => frame.classList.remove('is-playing'));
+                    }
+                };
+
+                video.addEventListener('play',  () => frame.classList.add('is-playing'));
+                video.addEventListener('pause', () => frame.classList.remove('is-playing'));
+
+                const toggle = (e) => {
+                    if (e) e.preventDefault();
+                    if (video.paused) {
+                        pausedByUser = false;
+                        play();
+                    } else {
+                        pausedByUser = true;
+                        video.pause();
+                    }
+                };
+
+                if (playBtn) playBtn.addEventListener('click', toggle);
+                video.addEventListener('click', toggle);
+
+                if (!('IntersectionObserver' in window)) return;
+
+                const vObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            if (canAutoplay() && !pausedByUser && video.paused) play();
+                        } else if (!video.paused) {
+                            video.pause();
+                        }
+                    });
+                }, { threshold: 0.45 });
+
+                vObserver.observe(frame);
+            });
+        })();
 
     </script>
 

@@ -42,9 +42,9 @@ Single-page institucional com **8 seções principais**, design editorial-arquit
 | 1 | **Hero** | Destaque com chamada principal e estatísticas |
 | 2 | **Sobre** | 3 pilares: Pontualidade, Materiais Premium, Engenharia |
 | 3 | **Serviços** | 4 cards: Construção, Reformas, Gerenciamento, Design |
-| 4 | **Portfólio** | 8 obras reais de 4 clientes corporativos |
+| 4 | **Portfólio** | 8 obras reais de 4 clientes + vídeos Antes/Agora (Embracon Valinhos) |
 | 5 | **Depoimentos** | Carrossel com auto-play |
-| 6 | **Clientes** | Marquee de 9 empresas atendidas |
+| 6 | **Clientes** | Marquee de 10 empresas atendidas |
 | 7 | **Contato** | Formulário com integração WhatsApp |
 | 8 | **Footer** | Navegação, contatos e dados institucionais |
 
@@ -56,7 +56,7 @@ Single-page institucional com **8 seções principais**, design editorial-arquit
 marvit-site/
 ├── index.html              # Arquivo principal (HTML + CSS + JS embutidos)
 ├── README.md               # Esta documentação
-└── img/                    # Imagens das obras
+└── img/                    # Imagens e vídeos das obras
     ├── parason-01.jpg      # Tanque criogênico — Parason Indiana
     ├── parason-02.jpg      # Içamento com guindaste — Parason Indiana
     ├── optima-01.jpg       # Sala operacional — Óptima do Brasil
@@ -64,8 +64,14 @@ marvit-site/
     ├── kadant-01.jpg       # Cozinha industrial — Kadant
     ├── kadant-02.jpg       # Fachada corporativa — Kadant
     ├── fluidra-01.jpg      # Fluidra Pro Center — Fluidra do Brasil
-    └── fluidra-02.jpg      # Fachada principal — Fluidra do Brasil
+    ├── fluidra-02.jpg      # Fachada principal — Fluidra do Brasil
+    ├── embracon-valinhos-antes.mp4   # Vídeo "Antes"  — vertical  (478x850)
+    └── embracon-valinhos-agora.mp4   # Vídeo "Agora"  — horizontal (848x478)
 ```
+
+> **Nomes de arquivo:** use sempre minúsculas, sem espaços e sem acentos
+> (`embracon-valinhos-antes.mp4`). Espaços no nome viram `%20` na URL e
+> quebram em alguns navegadores e no GitHub Pages.
 
 ---
 
@@ -137,12 +143,13 @@ O arquivo `index.html` usa **índices `[XX]`** em todos os comentários para fac
 | Índice | Função | O que faz |
 |---|---|---|
 | `[JS-01]` | Navbar dinâmico | Muda fundo do header ao rolar |
-| `[JS-02]` | Menu mobile | Abre/fecha menu hambúrguer |
+| `[JS-02]` | Menu mobile | Abre/fecha o menu hambúrguer (tela cheia no celular, gaveta de 420 px no tablet), com fundo escurecido, trava de rolagem e fechamento por Esc / clique fora |
 | `[JS-03]` | Reveal on scroll | Anima elementos ao entrarem na viewport |
 | `[JS-04]` | Carrossel | Controla depoimentos (anterior/próximo/auto-play) |
 | `[JS-05]` | Smooth scroll | Rolagem suave nos links âncora |
 | `[JS-06]` | Formulário WhatsApp | Envia orçamento via `wa.me` |
 | `[JS-07]` | Botão flutuante | Mostra/esconde botão de WhatsApp |
+| `[JS-08]` | Vídeos Antes/Agora | Toca ao entrar na tela (só no desktop), pausa ao sair, play/pause no clique |
 
 ---
 
@@ -196,15 +203,35 @@ Todas as cores do site derivam dessas variáveis — trocar aqui atualiza o site
 
 > **Dica de performance:** redimensione as fotos para no máximo **1600 px de largura** e exporte em JPEG com qualidade 80–85. Isso reduz o peso sem perda visível de qualidade.
 
+### Trocar os vídeos "Antes / Agora"
+
+Os dois vídeos ficam no bloco `<!-- BLOCO DE VÍDEOS -->` da seção `[05]`, dentro de `.video-compare`. Cada um vive em um `<figure>` com a classe da sua orientação:
+
+| Classe | Quando usar | Efeito no desktop |
+|---|---|---|
+| `is-portrait` | vídeo em pé (mais alto que largo) | largura = altura × proporção do arquivo |
+| `is-landscape` | vídeo deitado (mais largo que alto) | largura = altura × proporção do arquivo |
+
+Ao trocar um vídeo, atualize **três** pontos:
+
+1. O `src` do `<video>`
+2. Os atributos `width` / `height` (a resolução real do arquivo — evita "salto" no layout ao carregar)
+3. A proporção usada no CSS, em `.video-compare > figure.is-portrait` / `.is-landscape`
+   (ex.: `calc(var(--video-h) * 478 / 850)` → troque `478 / 850` pela resolução nova)
+
+Se a orientação do arquivo mudar (de vertical para horizontal, por exemplo), troque também a classe do `<figure>`.
+
+> **Dica de performance:** vídeo é o arquivo mais pesado do site. Exporte em **H.264 (MP4)**, largura máxima de 1280 px, ~30 fps e sem áudio — os vídeos tocam sempre no mudo. Mire em **até 5 MB por arquivo**. O site já usa `preload="metadata"`, então o vídeo só é baixado quando começa a tocar, e **no celular ele só toca depois que o visitante toca no play** (economia de dados).
+
 ### Adicionar/remover depoimentos
 
-Cada depoimento é um `<div class="testimonial-slide">` dentro de `#testimonial-track`. Após a alteração, atualize a constante `totalSlides` em `[JS-04]`:
+Cada depoimento é um `<div class="testimonial-slide">` dentro de `#testimonial-track`. A quantidade é contada automaticamente pelo `[JS-04]` (`track.children.length`), então **não é preciso mexer no JavaScript**.
 
-```javascript
-const totalSlides = 3; // ← ajuste conforme a quantidade
+O único ajuste manual são os pontos/dots (busque por `class="dot"`) — precisa existir **um dot por depoimento**, com o `data-index` em sequência a partir de 0:
+
+```html
+<button class="dot w-8 h-px transition-all duration-500 opacity-20" data-index="3" style="background: var(--ink);"></button>
 ```
-
-E os pontos/dots correspondentes no HTML (busque por `class="dot"`).
 
 ### Alterar a lista de clientes (marquee)
 
