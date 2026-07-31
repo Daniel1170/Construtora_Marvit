@@ -18,7 +18,8 @@
     [02]     Hero — destaque principal
     [03]     Diferenciais / Sobre — 3 pilares
     [04]     Serviços — grid de 4 cards
-    [05]     Portfólio — 8 obras + vídeos Antes/Agora (Embracon)
+    [05]     Portfólio — 8 obras + Antes/Agora (vídeos Embracon,
+             fotos Flexco Brasil)
     [06]     Depoimentos + Carrossel + Marquee de Clientes
     [07]     CTA / Contato — formulário WhatsApp
     [08]     Footer
@@ -317,7 +318,8 @@
             height: auto;
             max-height: 72vh;
         }
-        .video-frame .video-tag {
+        .video-frame .video-tag,
+        .photo-frame .photo-tag {
             position: absolute;
             top: 16px;
             left: 16px;
@@ -392,6 +394,43 @@
                 height: var(--video-h);
                 max-height: none;
                 object-fit: contain; /* rede de segurança contra distorção */
+            }
+        }
+
+        /* Bloco de fotos Antes / Agora (portfólio)
+           Mesma linguagem visual do bloco de vídeos, mas para fotos.
+           Como as duas imagens têm a mesma proporção (3/4 — 960x1280),
+           basta um grid de colunas iguais: empilha no mobile e fica
+           lado a lado no desktop, sem cálculo de proporção. */
+        .photo-compare {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        .photo-frame {
+            position: relative;
+            overflow: hidden;
+            background: #05060b;
+            line-height: 0;
+        }
+        .photo-frame img {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 3 / 4;
+            object-fit: cover;
+            transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .photo-frame:hover img { transform: scale(1.04); }
+        @media (min-width: 1024px) {
+            .photo-compare {
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+                /* Limite de largura pra dupla de fotos verticais não
+                   virar duas colunas gigantes em telas largas. */
+                max-width: 980px;
+                margin-left: auto;
+                margin-right: auto;
             }
         }
 
@@ -1197,6 +1236,58 @@
                     </figure>
                 </div>
             </div>
+
+            <!-- ============ BLOCO DE FOTOS — FLEXCO BRASIL ============
+                 Comparativo "Antes / Agora" em foto da instalação da
+                 balança de piso: demolição do piso de concreto para
+                 abrir a caixa e assentamento da plataforma nivelada.
+                 Obra em andamento — o bloco usa .photo-compare (CSS),
+                 sem JS: as duas imagens têm proporção 3/4 (960x1280).
+                 ========================================================= -->
+            <div class="mt-20 lg:mt-28 reveal">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+                    <div>
+                        <div class="text-[10px] tracking-widest-plus uppercase mb-3" style="color: var(--gold);">Antes &amp; Agora · Flexco Brasil</div>
+                        <h3 class="font-display font-light leading-[1.1]" style="font-size: clamp(1.75rem, 3.2vw, 2.75rem);">
+                            Instalação de <em class="italic" style="color: var(--gold);">balança de piso</em>.
+                        </h3>
+                    </div>
+                    <p class="text-sm font-light max-w-sm sm:text-right" style="color: rgba(245,243,238,0.7);">
+                        Obra em andamento na Flexco Brasil — demolição controlada do piso
+                        de concreto, execução da caixa e assentamento da plataforma.
+                    </p>
+                </div>
+
+                <div class="photo-compare">
+                    <!-- ANTES (foto vertical — 960x1280) -->
+                    <figure>
+                        <div class="photo-frame">
+                            <span class="photo-tag">Antes</span>
+                            <img src="img/flexco-brasil-antes.jpeg"
+                                 width="960" height="1280" loading="lazy" decoding="async"
+                                 alt="Demolição controlada do piso de concreto com martelete para abrir a caixa da balança — Flexco Brasil">
+                        </div>
+                        <figcaption class="video-caption text-sm font-light" style="color: rgba(245,243,238,0.7);">
+                            <span class="font-display text-lg" style="color: var(--paper);">Como começamos</span><br>
+                            Corte e demolição do piso de concreto para abrir a caixa da balança.
+                        </figcaption>
+                    </figure>
+
+                    <!-- AGORA (foto vertical — 960x1280) -->
+                    <figure>
+                        <div class="photo-frame">
+                            <span class="photo-tag">Agora</span>
+                            <img src="img/flexco-brasil-agora.jpeg"
+                                 width="960" height="1280" loading="lazy" decoding="async"
+                                 alt="Plataforma da balança de piso assentada e nivelada com o piso acabado — Flexco Brasil">
+                        </div>
+                        <figcaption class="video-caption text-sm font-light" style="color: rgba(245,243,238,0.7);">
+                            <span class="font-display text-lg" style="color: var(--paper);">Como está agora</span><br>
+                            Plataforma assentada, moldura estrutural e piso nivelado no acabamento.
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -1206,7 +1297,7 @@
          Duas partes:
            1. Carrossel de 4 depoimentos (Kadant, Symrise,
               Leroy Merlin, Embracon) — controlado por [JS-04]
-           2. Marquee de logos/nomes dos 10 clientes em
+           2. Marquee de logos/nomes dos 11 clientes em
               loop infinito (animação CSS pura)
          ============================================ -->
     <section class="relative py-28 lg:py-40" style="background: var(--paper);">
@@ -1337,6 +1428,7 @@
                         <div class="font-display text-2xl lg:text-3xl whitespace-nowrap opacity-50 tracking-widest-plus">CLICHER LUX</div>
                         <div class="font-display text-2xl lg:text-3xl italic font-light whitespace-nowrap opacity-50">Leroy Merlin</div>
                         <div class="font-display text-2xl lg:text-3xl whitespace-nowrap opacity-50 tracking-wider">EMBRACON VALINHOS</div>
+                        <div class="font-display text-2xl lg:text-3xl italic font-light whitespace-nowrap opacity-50">Flexco Brasil</div>
                         <!-- Duplicado para loop infinito -->
                         <div class="font-display text-2xl lg:text-3xl whitespace-nowrap opacity-50 tracking-widest-plus">KADANT</div>
                         <div class="font-display text-2xl lg:text-3xl italic font-light whitespace-nowrap opacity-50">Fluidra do Brasil</div>
@@ -1348,6 +1440,7 @@
                         <div class="font-display text-2xl lg:text-3xl whitespace-nowrap opacity-50 tracking-widest-plus">CLICHER LUX</div>
                         <div class="font-display text-2xl lg:text-3xl italic font-light whitespace-nowrap opacity-50">Leroy Merlin</div>
                         <div class="font-display text-2xl lg:text-3xl whitespace-nowrap opacity-50 tracking-wider">EMBRACON VALINHOS</div>
+                        <div class="font-display text-2xl lg:text-3xl italic font-light whitespace-nowrap opacity-50">Flexco Brasil</div>
                     </div>
                 </div>
             </div>
@@ -1784,8 +1877,8 @@
          * NÃO mandamos os dados para um servidor. Em vez disso:
          *
          *   1. Coletamos os campos preenchidos
-         *   2. Montamos uma mensagem formatada (negrito,
-         *      itálico, emojis — sintaxe do WhatsApp)
+         *   2. Montamos uma mensagem formatada (negrito e
+         *      itálico — sintaxe do WhatsApp, sem emojis)
          *   3. Abrimos uma URL https://wa.me/{numero}?text=...
          *      que abre o WhatsApp Web/App com a mensagem
          *      pronta para o cliente apenas apertar "Enviar"
@@ -1814,14 +1907,30 @@
 
             // ── Passo 2: Montar mensagem formatada ──
             // Sintaxe WhatsApp: *negrito*, _itálico_, \n = quebra de linha
-            const texto =
-                `*Nova Solicitação de Orçamento*\n` +
-                `_via site Marvit Excellence_\n\n` +
-                `👤 *Nome:* ${nome}\n` +
-                `📱 *Telefone:* ${telefone}\n` +
-                `✉️ *E-mail:* ${email}\n` +
-                `🏗️ *Tipo de Projeto:* ${projeto}\n\n` +
-                `📝 *Detalhes do Projeto:*\n${mensagem}`;
+            //
+            // ⚠️ NÃO use emojis aqui. O texto viaja dentro da URL do
+            //    wa.me e, no repasse pro app do WhatsApp (principalmente
+            //    o Desktop no Windows), os emojis chegavam quebrados —
+            //    viravam "◆" na mensagem recebida. Acentos passam sem
+            //    problema; emojis não. Sem emoji, chega igual em
+            //    WhatsApp Web, Android, iOS e Desktop.
+            const linhas = [
+                `*Nova Solicitação de Orçamento*`,
+                `_via site Marvit Excellence_`,
+                ``,
+                `*Nome:* ${nome}`,
+                `*Telefone:* ${telefone}`,
+                `*E-mail:* ${email}`,
+                `*Tipo de Projeto:* ${projeto}`,
+            ];
+
+            // Detalhes só entram se o cliente escreveu algo — evita
+            // mandar um título "Detalhes do Projeto:" com nada embaixo.
+            if (mensagem) {
+                linhas.push(``, `*Detalhes do Projeto:*`, mensagem);
+            }
+
+            const texto = linhas.join('\n');
 
             // ── Passo 3: Abrir WhatsApp em nova aba ──
             // encodeURIComponent converte caracteres especiais

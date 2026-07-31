@@ -42,9 +42,9 @@ Single-page institucional com **8 seções principais**, design editorial-arquit
 | 1 | **Hero** | Destaque com chamada principal e estatísticas |
 | 2 | **Sobre** | 3 pilares: Pontualidade, Materiais Premium, Engenharia |
 | 3 | **Serviços** | 4 cards: Construção, Reformas, Gerenciamento, Design |
-| 4 | **Portfólio** | 8 obras reais de 4 clientes + vídeos Antes/Agora (Embracon Valinhos) |
+| 4 | **Portfólio** | 8 obras reais de 4 clientes + Antes/Agora em vídeo (Embracon Valinhos) e em foto (Flexco Brasil) |
 | 5 | **Depoimentos** | Carrossel com auto-play |
-| 6 | **Clientes** | Marquee de 10 empresas atendidas |
+| 6 | **Clientes** | Marquee de 11 empresas atendidas |
 | 7 | **Contato** | Formulário com integração WhatsApp |
 | 8 | **Footer** | Navegação, contatos e dados institucionais |
 
